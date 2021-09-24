@@ -197,4 +197,34 @@ public class Matrix {
     }
     return retArray;
   }
+
+  // ==========
+  // INTERPOLATION
+  // ==========
+
+  public void solveInterpolation(double x) {
+    double[] retArray;
+    Matrix eqMatrix = new Matrix(this.rows, this.rows + 1);
+    for (int i = 0; i < this.rows; i ++) { // Proses semua titik yang diberikan
+      for (int j = 0; j < this.rows; j ++) { // Buat matriks eqMatrix
+        eqMatrix.contents[i][j] = Math.pow(this.contents[i][0], j);
+      }
+      eqMatrix.contents[i][this.rows] = this.contents[i][1];
+    }
+    retArray = eqMatrix.solveByCramerRule();
+    double approx = 0;
+    System.out.println("Persamaan interpolasinya adalah: ");
+    for (int i = 0; i < retArray.length; i ++) { // Proses retArray
+      if (i == 0) { // Konstanta
+        System.out.print(retArray[i]);
+      } else if (i == 1) {
+        System.out.print(" + " + retArray[i] + "x");
+      } else {
+        System.out.print(" + " + retArray[i] + "x^" + i);
+      }
+      approx += Math.pow(x, i) * retArray[i];
+    }
+    System.out.println("");
+    System.out.println("Taksiran untuk titik x=" + x + " adalah " + approx);
+  }
 }

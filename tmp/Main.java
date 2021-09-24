@@ -7,7 +7,7 @@ public class Main {
   // ==========
   // MENU PERHITUNGAN DETERMINAN
   // ==========
-  
+
   static void hitungDeterminantCofactor() {
     System.out.print("Masukkan ordo matriks persegi: ");
     int rows = sc.nextInt();
@@ -79,6 +79,25 @@ public class Main {
   }
 
   // ==========
+  // MENU INTERPOLASI
+  // ==========
+
+  static void interpolasi() {
+    System.out.print("Masukkan orde polinomial: ");
+    int n = sc.nextInt();
+
+    Matrix mat = new Matrix(n + 1, 2);
+    System.out.println("Masukkan " + (n+1) + " pasangan x y:");
+    mat.readMatrix();
+
+    System.out.print("Masukkan nilai x yang ingin ditaksir: ");
+    double x = sc.nextDouble();
+
+    mat.solveInterpolation(x);
+  }
+
+
+  // ==========
   // MENU UTAMA
   // ==========
 
@@ -101,6 +120,9 @@ public class Main {
         break;
       case 3:
         menuInvers();
+        break;
+      case 4:
+        interpolasi();
         break;
       default:
         isProgramRunning = false;
