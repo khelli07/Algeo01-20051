@@ -46,12 +46,31 @@ public class Main {
     mat.createInverseMatrix().displayMatrix();
   }
 
+  static void hitungSPLInvers() {
+    System.out.print("Masukkan banyak baris: ");
+    int rows = sc.nextInt();
+    System.out.print("Masukkan banyak kolom: ");
+    int cols = sc.nextInt();
+
+    Matrix mat = new Matrix(rows, cols);
+
+    System.out.println("Masukkan matriks: ");
+    mat.readMatrix();
+
+    
+    System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
+    double[] res = mat.solveByInverse();
+    for (int i = 0; i < res.length; i ++) {
+      System.out.println("x" + (i + 1) + " = " + res[i]);
+    }
+  }
+
   static void menu() {
     System.out.println("=== MENU ===");
     System.out.println("1. Hitung determinan (metode ekspansi kofaktor)");
     System.out.println("2. Penyelesaian SPL (metode Cramer)");
     System.out.println("3. Cari invers matriks");
-    System.out.println("4. Keluar dari program");
+    System.out.println("4. Penyelesaian SPL (metode invers)");
     System.out.print("Input Anda: ");
     int op = sc.nextInt();
     if (op == 1) {
@@ -64,6 +83,9 @@ public class Main {
       System.out.println("=== 3. Cari invers matriks");
       cariInvers();
     } else if (op == 4) {
+      System.out.println("=== 4. Penyelesaian SPL (metode invers)");
+      hitungSPLInvers();
+    } else {
       isProgramRunning = false;
     }
   }

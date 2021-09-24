@@ -51,6 +51,14 @@ public class Matrix {
     return mOut;
   }
 
+  public Matrix copyMatrixLC() {
+    Matrix mOut = new Matrix(this.rows, 1);
+    for (int i = 0; i < this.rows; i ++) {
+      mOut.contents[i][0] = this.contents[i][this.cols - 1];
+    }
+    return mOut;
+  }
+
   public double getMinorEntry(int row, int col) {
     Matrix minor = new Matrix(this.rows - 1, this.cols - 1);
     int rowIdx = 0;
@@ -102,7 +110,21 @@ public class Matrix {
     }
     return iMatrix;
   }
-  
+
+  public Matrix getMatrixMultipliedBy(Matrix m) {
+    Matrix mMatrix = new Matrix(this.rows, m.cols);
+    for (int i = 0; i < this.rows; i ++) {
+      for (int j = 0; j < m.cols; j ++) {
+        double sum = 0;
+        for (int k = 0; k < this.cols; k++) {
+          sum += this.contents[i][k] * m.contents[k][j];
+        }
+        mMatrix.contents[i][j] = sum;
+      }
+    }
+    return mMatrix;
+  }
+
   public double getDeterminantByCofactor() {
     if (this.rows == 1) {
       return this.contents[0][0];
@@ -136,6 +158,18 @@ public class Matrix {
           retArray[col] = cramerDet / det;
         }
       }
+    }
+    return retArray;
+  }
+
+  public double[] solveByInverse() {
+    double[] retArray;
+    retArray = new double[this.cols - 1];
+    Matrix coeffMatrix = this.copyMatrixWithoutLC();
+    Matrix valMatrix = this.copyMatrixLC();
+    Matrix resMatrix = coeffMatrix.createInverseMatrix().getMatrixMultipliedBy(valMatrix);
+    for (int i = 0; i < resMatrix.rows; i ++) {
+      retArray[i] = resMatrix.contents[i][0];
     }
     return retArray;
   }
