@@ -40,6 +40,8 @@ public class Main {
     int rows = sc.nextInt();
 
     Matrix mat = new Matrix(rows, rows);
+
+    System.out.println("Masukkan matriks: ");
     mat.readMatrix();
 
     System.out.println("Inversnya adalah: ");
@@ -56,7 +58,6 @@ public class Main {
 
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
-
     
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
     double[] res = mat.solveByInverse();
@@ -71,6 +72,7 @@ public class Main {
     System.out.println("2. Penyelesaian SPL (metode Cramer)");
     System.out.println("3. Cari invers matriks");
     System.out.println("4. Penyelesaian SPL (metode invers)");
+    System.out.println("Input lain akan menyebabkan program berhenti.");
     System.out.print("Input Anda: ");
     int op = sc.nextInt();
     if (op == 1) {
