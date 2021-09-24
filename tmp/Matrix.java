@@ -8,6 +8,10 @@ public class Matrix {
 
   static Scanner sc = new Scanner(System.in);
 
+  // ===========
+  // CONSTRUCTOR AND BASIC FUNCTIONS
+  // =========== 
+
   Matrix(int rows, int cols) {
     this.contents = new double[rows][cols];
     this.rows = rows;
@@ -30,6 +34,10 @@ public class Matrix {
       System.out.println("");
     }
   }
+
+  // ===========
+  // COPY MATRIX
+  // =========== 
 
   public Matrix copyMatrix() {
     Matrix mOut = new Matrix(this.rows, this.cols);
@@ -59,6 +67,10 @@ public class Matrix {
     return mOut;
   }
 
+  // ===========
+  // DETERMINANT BY COFACTOR
+  // =========== 
+
   public double getMinorEntry(int row, int col) {
     Matrix minor = new Matrix(this.rows - 1, this.cols - 1);
     int rowIdx = 0;
@@ -76,6 +88,27 @@ public class Matrix {
     }
     return minor.getDeterminantByCofactor();
   }
+
+  public double getDeterminantByCofactor() {
+    if (this.rows == 1) {
+      return this.contents[0][0];
+    } else if (this.rows == 2) {
+      return (this.contents[0][0] * this.contents[1][1]) - (this.contents[0][1] * this.contents[1][0]);
+    } else {
+      double determinant = 0;
+      int sign = 1;
+      // Akan digunakan ekspansi kofaktor pada baris pertama.
+      for (int j = 0; j < this.cols; j ++) { // Proses baris pertama matriks.
+        determinant += this.contents[0][j] * this.getMinorEntry(0, j) * sign;
+        sign *= - 1;
+      }
+      return determinant;
+    }
+  }
+
+  // ===========
+  // INVERSE BY ADJOIN
+  // =========== 
   
   public Matrix createTransposeMatrix() {
     Matrix tMatrix = new Matrix(this.rows, this.cols);
@@ -111,36 +144,9 @@ public class Matrix {
     return iMatrix;
   }
 
-  public Matrix getMatrixMultipliedBy(Matrix m) {
-    Matrix mMatrix = new Matrix(this.rows, m.cols);
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < m.cols; j ++) {
-        double sum = 0;
-        for (int k = 0; k < this.cols; k++) {
-          sum += this.contents[i][k] * m.contents[k][j];
-        }
-        mMatrix.contents[i][j] = sum;
-      }
-    }
-    return mMatrix;
-  }
-
-  public double getDeterminantByCofactor() {
-    if (this.rows == 1) {
-      return this.contents[0][0];
-    } else if (this.rows == 2) {
-      return (this.contents[0][0] * this.contents[1][1]) - (this.contents[0][1] * this.contents[1][0]);
-    } else {
-      double determinant = 0;
-      int sign = 1;
-      // Akan digunakan ekspansi kofaktor pada baris pertama.
-      for (int j = 0; j < this.cols; j ++) { // Proses baris pertama matriks.
-        determinant += this.contents[0][j] * this.getMinorEntry(0, j) * sign;
-        sign *= - 1;
-      }
-      return determinant;
-    }
-  }
+  // ===========
+  // EQUATION SOLVING BY CRAMER'S RULE
+  // =========== 
 
   public double[] solveByCramerRule() {
     double[] retArray;
@@ -160,6 +166,24 @@ public class Matrix {
       }
     }
     return retArray;
+  }
+
+  // ===========
+  // EQUATION SOLVING BY INVERSE
+  // =========== 
+
+  public Matrix getMatrixMultipliedBy(Matrix m) {
+    Matrix mMatrix = new Matrix(this.rows, m.cols);
+    for (int i = 0; i < this.rows; i ++) {
+      for (int j = 0; j < m.cols; j ++) {
+        double sum = 0;
+        for (int k = 0; k < this.cols; k++) {
+          sum += this.contents[i][k] * m.contents[k][j];
+        }
+        mMatrix.contents[i][j] = sum;
+      }
+    }
+    return mMatrix;
   }
 
   public double[] solveByInverse() {

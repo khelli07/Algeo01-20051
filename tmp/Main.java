@@ -4,6 +4,10 @@ public class Main {
   static boolean isProgramRunning = true;
   static Scanner sc = new Scanner(System.in);
 
+  // ==========
+  // MENU PERHITUNGAN DETERMINAN
+  // ==========
+  
   static void hitungDeterminantCofactor() {
     System.out.print("Masukkan ordo matriks persegi: ");
     int rows = sc.nextInt();
@@ -15,6 +19,10 @@ public class Main {
 
     System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByCofactor());
   }
+
+  // ==========
+  // MENU PERHITUNGAN SPL
+  // ==========
 
   static void hitungSPLCramer() {
     System.out.print("Masukkan banyak baris: ");
@@ -35,19 +43,6 @@ public class Main {
     }
   }
 
-  static void cariInvers() {
-    System.out.print("Masukkan ordo matriks: ");
-    int rows = sc.nextInt();
-
-    Matrix mat = new Matrix(rows, rows);
-
-    System.out.println("Masukkan matriks: ");
-    mat.readMatrix();
-
-    System.out.println("Inversnya adalah: ");
-    mat.createInverseMatrix().displayMatrix();
-  }
-
   static void hitungSPLInvers() {
     System.out.print("Masukkan banyak baris: ");
     int rows = sc.nextInt();
@@ -66,29 +61,93 @@ public class Main {
     }
   }
 
+  // ==========
+  // MENU PERHITUNGAN INVERS
+  // ==========
+
+  static void cariInversAdjoin() {
+    System.out.print("Masukkan ordo matriks: ");
+    int rows = sc.nextInt();
+
+    Matrix mat = new Matrix(rows, rows);
+
+    System.out.println("Masukkan matriks: ");
+    mat.readMatrix();
+
+    System.out.println("Inversnya adalah: ");
+    mat.createInverseMatrix().displayMatrix();
+  }
+
+  // ==========
+  // MENU UTAMA
+  // ==========
+
   static void menu() {
-    System.out.println("=== MENU ===");
-    System.out.println("1. Hitung determinan (metode ekspansi kofaktor)");
-    System.out.println("2. Penyelesaian SPL (metode Cramer)");
-    System.out.println("3. Cari invers matriks");
-    System.out.println("4. Penyelesaian SPL (metode invers)");
-    System.out.println("Input lain akan menyebabkan program berhenti.");
+    System.out.println("MENU");
+    System.out.println("1. Sistem Persamaan Linier");
+    System.out.println("2. Determinan");
+    System.out.println("3. Matriks balikan");
+    System.out.println("4. Interpolasi polinom");
+    System.out.println("5. Regresi linier berganda");
+    System.out.println("6. Keluar");
     System.out.print("Input Anda: ");
     int op = sc.nextInt();
-    if (op == 1) {
-      System.out.println("=== 1. Hitung determinan (metode ekspansi kofaktor)");
-      hitungDeterminantCofactor();
-    } else if (op == 2) {
-      System.out.println("=== 2. Penyelesaian SPL (metode Cramer)");
-      hitungSPLCramer();
-    } else if (op == 3) {
-      System.out.println("=== 3. Cari invers matriks");
-      cariInvers();
-    } else if (op == 4) {
-      System.out.println("=== 4. Penyelesaian SPL (metode invers)");
-      hitungSPLInvers();
-    } else {
-      isProgramRunning = false;
+    switch (op) {
+      case 1:
+        menuSPL();
+        break;
+      case 2:
+        menuDeterminan();
+        break;
+      case 3:
+        menuInvers();
+        break;
+      default:
+        isProgramRunning = false;
+    }
+  }
+
+  static void menuSPL() {
+    System.out.println("1. Metode eliminasi Gauss");
+    System.out.println("2. Metode eliminasi Gauss-Jordan");
+    System.out.println("3. Metode matriks balikan");
+    System.out.println("4. Kaidah Cramer");
+    int op = sc.nextInt();
+    switch (op) {
+      case 3:
+        hitungSPLInvers();
+        break;
+      case 4:
+        hitungSPLCramer();
+        break;
+      default:
+        menu();
+    }
+  }
+
+  static void menuDeterminan() {
+    System.out.println("1. Metode reduksi baris");
+    System.out.println("2. Metode ekspansi kofaktor");
+    int op = sc.nextInt();
+    switch(op) {
+      case 2:
+        hitungDeterminantCofactor();
+        break;
+      default:
+        menu();
+    }
+  }
+
+  static void menuInvers() {
+    System.out.println("1. Metode reduksi baris");
+    System.out.println("2. Metode matriks adjoin");
+    int op = sc.nextInt();
+    switch(op) {
+      case 2:
+        cariInversAdjoin();
+        break;
+      default:
+        menu();
     }
   }
   public static void main(String[] args) {
