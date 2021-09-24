@@ -51,6 +51,58 @@ public class Matrix {
     return mOut;
   }
 
+  public double getMinorEntry(int row, int col) {
+    Matrix minor = new Matrix(this.rows - 1, this.cols - 1);
+    int rowIdx = 0;
+    for (int i = 0; i < this.cols; i ++) {
+      int colIdx = 0;
+      if (i != row) {
+        for (int j = 0; j < this.rows; j ++) {
+          if (j != col) {
+            minor.contents[rowIdx][colIdx] = this.contents[i][j];  
+            colIdx ++;
+          }
+        }
+        rowIdx ++;
+      }
+    }
+    return minor.getDeterminantByCofactor();
+  }
+  
+  public Matrix createTransposeMatrix() {
+    Matrix tMatrix = new Matrix(this.rows, this.cols);
+    for (int i = 0; i < this.rows; i ++) {
+      for (int j = 0; j < this.cols; j ++) {
+        tMatrix.contents[i][j] = this.contents[j][i];
+      }
+    }
+    return tMatrix;
+  }
+
+  public Matrix createAdjoinMatrix() {
+    Matrix cMatrix = new Matrix(this.rows, this.cols);
+    for (int i = 0; i < this.rows; i ++) {
+      for (int j = 0; j < this.cols; j ++) {
+        cMatrix.contents[i][j] = this.getMinorEntry(i, j) * ((i + j) % 2 == 0 ? 1 : -1);
+      }
+    }
+    return cMatrix.createTransposeMatrix();
+  }
+  
+  public Matrix createInverseMatrix() {
+    Matrix iMatrix = this.createAdjoinMatrix();
+    double det = this.getDeterminantByCofactor();
+    if (det != 0) {
+      double mult = 1 / det;
+      for (int i = 0; i < this.rows; i ++) {
+        for (int j = 0; j < this.cols; j ++) {
+          iMatrix.contents[i][j] *= mult;
+        }
+      }
+    }
+    return iMatrix;
+  }
+  
   public double getDeterminantByCofactor() {
     if (this.rows == 1) {
       return this.contents[0][0];
@@ -61,18 +113,7 @@ public class Matrix {
       int sign = 1;
       // Akan digunakan ekspansi kofaktor pada baris pertama.
       for (int j = 0; j < this.cols; j ++) { // Proses baris pertama matriks.
-        Matrix minor = new Matrix(rows - 1, cols - 1);
-        // Buat minor matriks.
-        for (int row = 1; row < this.rows; row ++) { // Karena menggunakan ekspansi baris pertama, mulai dari baris kedua.
-          int minorColIdx = 0;
-          for (int col = 0; col < this.cols; col ++) {
-            if (col != j) {
-              minor.contents[row - 1][minorColIdx] = this.contents[row][col];
-              minorColIdx ++;
-            }
-          }
-        }
-        determinant += this.contents[0][j] * minor.getDeterminantByCofactor() * sign;
+        determinant += this.contents[0][j] * this.getMinorEntry(0, j) * sign;
         sign *= - 1;
       }
       return determinant;

@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Main {
   static boolean isProgramRunning = true;
   static Scanner sc = new Scanner(System.in);
-  
+
   static void hitungDeterminantCofactor() {
     System.out.print("Masukkan ordo matriks persegi: ");
     int rows = sc.nextInt();
@@ -35,11 +35,23 @@ public class Main {
     }
   }
 
+  static void cariInvers() {
+    System.out.print("Masukkan ordo matriks: ");
+    int rows = sc.nextInt();
+
+    Matrix mat = new Matrix(rows, rows);
+    mat.readMatrix();
+
+    System.out.println("Inversnya adalah: ");
+    mat.createInverseMatrix().displayMatrix();
+  }
+
   static void menu() {
     System.out.println("=== MENU ===");
     System.out.println("1. Hitung determinan (metode ekspansi kofaktor)");
     System.out.println("2. Penyelesaian SPL (metode Cramer)");
-    System.out.println("3. Keluar dari program");
+    System.out.println("3. Cari invers matriks");
+    System.out.println("4. Keluar dari program");
     System.out.print("Input Anda: ");
     int op = sc.nextInt();
     if (op == 1) {
@@ -49,6 +61,9 @@ public class Main {
       System.out.println("=== 2. Penyelesaian SPL (metode Cramer)");
       hitungSPLCramer();
     } else if (op == 3) {
+      System.out.println("=== 3. Cari invers matriks");
+      cariInvers();
+    } else if (op == 4) {
       isProgramRunning = false;
     }
   }
