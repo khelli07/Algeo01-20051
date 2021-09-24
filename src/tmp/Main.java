@@ -37,9 +37,10 @@ public class Main {
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
 
+    
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Cramer): ");
     double[] res = mat.solveByCramerRule();
-    for (int i = 0; i < res.length; i++) {
+    for (int i = 0; i < res.length; i ++) {
       System.out.println("x" + (i + 1) + " = " + res[i]);
     }
   }
@@ -54,10 +55,10 @@ public class Main {
 
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
-
+    
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
     double[] res = mat.solveByInverse();
-    for (int i = 0; i < res.length; i++) {
+    for (int i = 0; i < res.length; i ++) {
       System.out.println("x" + (i + 1) + " = " + res[i]);
     }
   }
@@ -88,13 +89,36 @@ public class Main {
     int n = sc.nextInt();
 
     Matrix mat = new Matrix(n + 1, 2);
-    System.out.println("Masukkan " + (n + 1) + " pasangan x y:");
+    System.out.println("Masukkan " + (n+1) + " pasangan x y:");
     mat.readMatrix();
 
     System.out.print("Masukkan nilai x yang ingin ditaksir: ");
     double x = sc.nextDouble();
 
     mat.solveInterpolation(x);
+  }
+
+  // ==========
+  // REGRESI LINEAR BERGANDA
+  // ==========
+  
+  static void regresiBerganda() {
+    System.out.print("Masukkan nilai n: ");
+    int n = sc.nextInt();
+
+    Matrix mat = new Matrix(n, n + 1);
+    System.out.println("Masukkan nilai x1i x2i ... xni yi: ");
+    mat.readMatrix();
+
+    double[] xTaksiran;
+    xTaksiran = new double[n];
+    System.out.println("Masukkan nilai x1k x2k ... xnk: ");
+
+    for (int i = 0; i < n; i ++) {
+      xTaksiran[i] = sc.nextDouble();
+    }
+
+    mat.solveRegression(xTaksiran);
   }
 
   // ==========
@@ -123,6 +147,9 @@ public class Main {
         break;
       case 4:
         interpolasi();
+        break;
+      case 5:
+        regresiBerganda();
         break;
       default:
         isProgramRunning = false;
@@ -172,7 +199,6 @@ public class Main {
         menu();
     }
   }
-
   public static void main(String[] args) {
     while (isProgramRunning) {
       menu();
