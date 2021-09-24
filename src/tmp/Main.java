@@ -1,3 +1,5 @@
+package src.tmp;
+
 import java.util.Scanner;
 
 public class Main {
@@ -35,10 +37,9 @@ public class Main {
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
 
-    
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Cramer): ");
     double[] res = mat.solveByCramerRule();
-    for (int i = 0; i < res.length; i ++) {
+    for (int i = 0; i < res.length; i++) {
       System.out.println("x" + (i + 1) + " = " + res[i]);
     }
   }
@@ -53,10 +54,10 @@ public class Main {
 
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
-    
+
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
     double[] res = mat.solveByInverse();
-    for (int i = 0; i < res.length; i ++) {
+    for (int i = 0; i < res.length; i++) {
       System.out.println("x" + (i + 1) + " = " + res[i]);
     }
   }
@@ -87,7 +88,7 @@ public class Main {
     int n = sc.nextInt();
 
     Matrix mat = new Matrix(n + 1, 2);
-    System.out.println("Masukkan " + (n+1) + " pasangan x y:");
+    System.out.println("Masukkan " + (n + 1) + " pasangan x y:");
     mat.readMatrix();
 
     System.out.print("Masukkan nilai x yang ingin ditaksir: ");
@@ -95,7 +96,6 @@ public class Main {
 
     mat.solveInterpolation(x);
   }
-
 
   // ==========
   // MENU UTAMA
@@ -151,7 +151,7 @@ public class Main {
     System.out.println("1. Metode reduksi baris");
     System.out.println("2. Metode ekspansi kofaktor");
     int op = sc.nextInt();
-    switch(op) {
+    switch (op) {
       case 2:
         hitungDeterminantCofactor();
         break;
@@ -164,7 +164,7 @@ public class Main {
     System.out.println("1. Metode reduksi baris");
     System.out.println("2. Metode matriks adjoin");
     int op = sc.nextInt();
-    switch(op) {
+    switch (op) {
       case 2:
         cariInversAdjoin();
         break;
@@ -172,6 +172,7 @@ public class Main {
         menu();
     }
   }
+
   public static void main(String[] args) {
     while (isProgramRunning) {
       menu();

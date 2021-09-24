@@ -1,3 +1,5 @@
+package src.tmp;
+
 import java.util.Scanner;
 
 public class Matrix {
@@ -10,7 +12,7 @@ public class Matrix {
 
   // ===========
   // CONSTRUCTOR AND BASIC FUNCTIONS
-  // =========== 
+  // ===========
 
   Matrix(int rows, int cols) {
     this.contents = new double[rows][cols];
@@ -19,16 +21,16 @@ public class Matrix {
   }
 
   public void readMatrix() {
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < this.cols; j ++) {
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
         this.contents[i][j] = sc.nextDouble();
       }
     }
   }
 
   public void displayMatrix() {
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < this.cols; j ++) {
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
         System.out.print(this.contents[i][j] + " ");
       }
       System.out.println("");
@@ -37,12 +39,12 @@ public class Matrix {
 
   // ===========
   // COPY MATRIX
-  // =========== 
+  // ===========
 
   public Matrix copyMatrix() {
     Matrix mOut = new Matrix(this.rows, this.cols);
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < this.cols; j ++) {
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
         mOut.contents[i][j] = this.contents[i][j];
       }
     }
@@ -51,8 +53,8 @@ public class Matrix {
 
   public Matrix copyMatrixWithoutLC() {
     Matrix mOut = new Matrix(this.rows, this.cols - 1);
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < this.cols - 1; j ++) {
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols - 1; j++) {
         mOut.contents[i][j] = this.contents[i][j];
       }
     }
@@ -61,7 +63,7 @@ public class Matrix {
 
   public Matrix copyMatrixLC() {
     Matrix mOut = new Matrix(this.rows, 1);
-    for (int i = 0; i < this.rows; i ++) {
+    for (int i = 0; i < this.rows; i++) {
       mOut.contents[i][0] = this.contents[i][this.cols - 1];
     }
     return mOut;
@@ -69,21 +71,21 @@ public class Matrix {
 
   // ===========
   // DETERMINANT BY COFACTOR
-  // =========== 
+  // ===========
 
   public double getMinorEntry(int row, int col) {
     Matrix minor = new Matrix(this.rows - 1, this.cols - 1);
     int rowIdx = 0;
-    for (int i = 0; i < this.cols; i ++) {
+    for (int i = 0; i < this.cols; i++) {
       int colIdx = 0;
       if (i != row) {
-        for (int j = 0; j < this.rows; j ++) {
+        for (int j = 0; j < this.rows; j++) {
           if (j != col) {
-            minor.contents[rowIdx][colIdx] = this.contents[i][j];  
-            colIdx ++;
+            minor.contents[rowIdx][colIdx] = this.contents[i][j];
+            colIdx++;
           }
         }
-        rowIdx ++;
+        rowIdx++;
       }
     }
     return minor.getDeterminantByCofactor();
@@ -98,9 +100,9 @@ public class Matrix {
       double determinant = 0;
       int sign = 1;
       // Akan digunakan ekspansi kofaktor pada baris pertama.
-      for (int j = 0; j < this.cols; j ++) { // Proses baris pertama matriks.
+      for (int j = 0; j < this.cols; j++) { // Proses baris pertama matriks.
         determinant += this.contents[0][j] * this.getMinorEntry(0, j) * sign;
-        sign *= - 1;
+        sign *= -1;
       }
       return determinant;
     }
@@ -108,12 +110,12 @@ public class Matrix {
 
   // ===========
   // INVERSE BY ADJOIN
-  // =========== 
-  
+  // ===========
+
   public Matrix createTransposeMatrix() {
     Matrix tMatrix = new Matrix(this.rows, this.cols);
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < this.cols; j ++) {
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
         tMatrix.contents[i][j] = this.contents[j][i];
       }
     }
@@ -122,21 +124,21 @@ public class Matrix {
 
   public Matrix createAdjoinMatrix() {
     Matrix cMatrix = new Matrix(this.rows, this.cols);
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < this.cols; j ++) {
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
         cMatrix.contents[i][j] = this.getMinorEntry(i, j) * ((i + j) % 2 == 0 ? 1 : -1);
       }
     }
     return cMatrix.createTransposeMatrix();
   }
-  
+
   public Matrix createInverseMatrix() {
     Matrix iMatrix = this.createAdjoinMatrix();
     double det = this.getDeterminantByCofactor();
     if (det != 0) {
       double mult = 1 / det;
-      for (int i = 0; i < this.rows; i ++) {
-        for (int j = 0; j < this.cols; j ++) {
+      for (int i = 0; i < this.rows; i++) {
+        for (int j = 0; j < this.cols; j++) {
           iMatrix.contents[i][j] *= mult;
         }
       }
@@ -146,7 +148,7 @@ public class Matrix {
 
   // ===========
   // EQUATION SOLVING BY CRAMER'S RULE
-  // =========== 
+  // ===========
 
   public double[] solveByCramerRule() {
     double[] retArray;
@@ -155,9 +157,9 @@ public class Matrix {
       Matrix squareMatrix = this.copyMatrixWithoutLC();
       double det = squareMatrix.getDeterminantByCofactor();
       if (det != 0) { // Apabila det = 0, tidak bisa diselesaikan dengan aturan Cramer
-        for (int col = 0; col < this.cols - 1; col ++) {
+        for (int col = 0; col < this.cols - 1; col++) {
           Matrix cramerMatrix = this.copyMatrixWithoutLC();
-          for (int row = 0; row < this.rows; row ++) {
+          for (int row = 0; row < this.rows; row++) {
             cramerMatrix.contents[row][col] = this.contents[row][this.cols - 1];
           }
           double cramerDet = cramerMatrix.getDeterminantByCofactor();
@@ -170,12 +172,12 @@ public class Matrix {
 
   // ===========
   // EQUATION SOLVING BY INVERSE
-  // =========== 
+  // ===========
 
   public Matrix getMatrixMultipliedBy(Matrix m) {
     Matrix mMatrix = new Matrix(this.rows, m.cols);
-    for (int i = 0; i < this.rows; i ++) {
-      for (int j = 0; j < m.cols; j ++) {
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < m.cols; j++) {
         double sum = 0;
         for (int k = 0; k < this.cols; k++) {
           sum += this.contents[i][k] * m.contents[k][j];
@@ -192,7 +194,7 @@ public class Matrix {
     Matrix coeffMatrix = this.copyMatrixWithoutLC();
     Matrix valMatrix = this.copyMatrixLC();
     Matrix resMatrix = coeffMatrix.createInverseMatrix().getMatrixMultipliedBy(valMatrix);
-    for (int i = 0; i < resMatrix.rows; i ++) {
+    for (int i = 0; i < resMatrix.rows; i++) {
       retArray[i] = resMatrix.contents[i][0];
     }
     return retArray;
@@ -205,8 +207,8 @@ public class Matrix {
   public void solveInterpolation(double x) {
     double[] retArray;
     Matrix eqMatrix = new Matrix(this.rows, this.rows + 1);
-    for (int i = 0; i < this.rows; i ++) { // Proses semua titik yang diberikan
-      for (int j = 0; j < this.rows; j ++) { // Buat matriks eqMatrix
+    for (int i = 0; i < this.rows; i++) { // Proses semua titik yang diberikan
+      for (int j = 0; j < this.rows; j++) { // Buat matriks eqMatrix
         eqMatrix.contents[i][j] = Math.pow(this.contents[i][0], j);
       }
       eqMatrix.contents[i][this.rows] = this.contents[i][1];
@@ -214,7 +216,7 @@ public class Matrix {
     retArray = eqMatrix.solveByCramerRule();
     double approx = 0;
     System.out.println("Persamaan interpolasinya adalah: ");
-    for (int i = 0; i < retArray.length; i ++) { // Proses retArray
+    for (int i = 0; i < retArray.length; i++) { // Proses retArray
       if (i == 0) { // Konstanta
         System.out.print(retArray[i]);
       } else if (i == 1) {
