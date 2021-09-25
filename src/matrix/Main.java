@@ -1,4 +1,4 @@
-package src.tmp;
+package src.matrix;
 
 import java.util.Scanner;
 
@@ -22,6 +22,16 @@ public class Main {
     System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByCofactor());
   }
 
+  static void hitungDeterminantOBE() {
+    System.out.print("Masukkan ordo matriks persegi: ");
+    int rows = sc.nextInt();
+
+    Matrix mat = new Matrix(rows, rows);
+
+    System.out.println("Masukkan matriks: ");
+    mat.readMatrix();
+    System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByOBE());
+  }
   // ==========
   // MENU PERHITUNGAN SPL
   // ==========
@@ -37,10 +47,9 @@ public class Main {
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
 
-    
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Cramer): ");
     double[] res = mat.solveByCramerRule();
-    for (int i = 0; i < res.length; i ++) {
+    for (int i = 0; i < res.length; i++) {
       System.out.println("x" + (i + 1) + " = " + res[i]);
     }
   }
@@ -55,12 +64,27 @@ public class Main {
 
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
-    
+
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
     double[] res = mat.solveByInverse();
-    for (int i = 0; i < res.length; i ++) {
+    for (int i = 0; i < res.length; i++) {
       System.out.println("x" + (i + 1) + " = " + res[i]);
     }
+  }
+
+  static void hitungSPLGauss() {
+    System.out.print("Masukkan banyak baris: ");
+    int rows = sc.nextInt();
+    System.out.print("Masukkan banyak kolom: ");
+    int cols = sc.nextInt();
+
+    Matrix mat = new Matrix(rows, cols);
+
+    System.out.println("Masukkan matriks: ");
+    mat.readMatrix();
+
+    System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss): ");
+    mat.solveByGauss();
   }
 
   static void hitungSPLGaussJordan() {
@@ -74,13 +98,12 @@ public class Main {
     System.out.println("Masukkan matriks: ");
     mat.readMatrix();
 
-    
     System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): ");
     String[] res = mat.solveByGaussJordan();
     if (res[0] == "false") {
       System.out.println("Solusi tidak ada");
     } else {
-      for (int i = 0; i < res.length; i ++) {
+      for (int i = 0; i < res.length; i++) {
         System.out.println("x" + (i + 1) + " = " + res[i]);
       }
     }
@@ -103,6 +126,19 @@ public class Main {
     mat.createInverseMatrix().displayMatrix();
   }
 
+  static void cariInversOBE() {
+    System.out.print("Masukkan ordo matriks: ");
+    int rows = sc.nextInt();
+
+    Matrix mat = new Matrix(rows, rows);
+
+    System.out.println("Masukkan matriks: ");
+    mat.readMatrix();
+
+    System.out.println("Inversnya adalah: ");
+    mat.inverseByOBE();
+  }
+
   // ==========
   // MENU INTERPOLASI
   // ==========
@@ -112,7 +148,7 @@ public class Main {
     int n = sc.nextInt();
 
     Matrix mat = new Matrix(n + 1, 2);
-    System.out.println("Masukkan " + (n+1) + " pasangan x y:");
+    System.out.println("Masukkan " + (n + 1) + " pasangan x y:");
     mat.readMatrix();
 
     System.out.print("Masukkan nilai x yang ingin ditaksir: ");
@@ -124,7 +160,7 @@ public class Main {
   // ==========
   // REGRESI LINEAR BERGANDA
   // ==========
-  
+
   static void regresiBerganda() {
     System.out.print("Masukkan nilai n: ");
     int n = sc.nextInt();
@@ -137,7 +173,7 @@ public class Main {
     xTaksiran = new double[n];
     System.out.println("Masukkan nilai x1k x2k ... xnk: ");
 
-    for (int i = 0; i < n; i ++) {
+    for (int i = 0; i < n; i++) {
       xTaksiran[i] = sc.nextDouble();
     }
 
@@ -186,6 +222,9 @@ public class Main {
     System.out.println("4. Kaidah Cramer");
     int op = sc.nextInt();
     switch (op) {
+      case 1:
+        hitungSPLGauss();
+        break;
       case 2:
         hitungSPLGaussJordan();
         break;
@@ -205,6 +244,9 @@ public class Main {
     System.out.println("2. Metode ekspansi kofaktor");
     int op = sc.nextInt();
     switch (op) {
+      case 1:
+        hitungDeterminantOBE();
+        break;
       case 2:
         hitungDeterminantCofactor();
         break;
@@ -218,6 +260,9 @@ public class Main {
     System.out.println("2. Metode matriks adjoin");
     int op = sc.nextInt();
     switch (op) {
+      case 1:
+        cariInversOBE();
+        break;
       case 2:
         cariInversAdjoin();
         break;
@@ -225,6 +270,7 @@ public class Main {
         menu();
     }
   }
+
   public static void main(String[] args) {
     while (isProgramRunning) {
       menu();

@@ -1,8 +1,8 @@
-package src.tmp;
+package dump;
 
 import java.util.Scanner;
 
-public class DeterminantRedux {
+public class DetOBE {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int dim = scan.nextInt();

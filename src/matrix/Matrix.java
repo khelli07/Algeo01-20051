@@ -1,4 +1,4 @@
-package src.tmp;
+package src.matrix;
 
 import java.util.Scanner;
 
@@ -64,7 +64,7 @@ public class Matrix {
   }
 
   // ===========
-  // COPY MATRIX
+  // MATRIX MANIPULATIONS
   // ===========
 
   public Matrix copyMatrix() {
@@ -92,6 +92,38 @@ public class Matrix {
     for (int i = 0; i < this.rows; i++) {
       mOut.contents[i][0] = this.contents[i][this.cols - 1];
     }
+    return mOut;
+  }
+
+  public Matrix copyWithIdentity() {
+    Matrix mOut = new Matrix(this.rows, this.cols * 2);
+    for (int i = 0; i < mOut.rows; i++) {
+      for (int j = 0; j < this.rows; j++) {
+        mOut.contents[i][j] = this.contents[i][j];
+      }
+
+      for (int j = this.rows; j < mOut.cols; j++) {
+        if (j == i + this.rows) {
+          mOut.contents[i][j] = 1;
+        } else {
+          mOut.contents[i][j] = 0;
+        }
+      }
+    }
+
+    return mOut;
+  }
+
+  public Matrix getInverse() {
+    int cols = this.cols / 2;
+    Matrix mOut = new Matrix(this.rows, cols);
+
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = cols; j < this.cols; j++) {
+        mOut.contents[i][j - cols] = this.contents[i][j];
+      }
+    }
+
     return mOut;
   }
 
@@ -135,6 +167,32 @@ public class Matrix {
   }
 
   // ===========
+  // DETERMINANT BY GAUSS REDUCTION
+  // ===========
+
+  public double getDeterminantByOBE() {
+    Matrix mat = this.copyMatrix();
+    for (int k = 1; k < mat.rows; k++) {
+      for (int i = k; i < mat.rows; i++) {
+        double p = mat.contents[i][k - 1];
+        double q = mat.contents[k - 1][k - 1];
+
+        if (q != 0) {
+          for (int j = 0; j < mat.rows; j++) {
+            mat.contents[i][j] = mat.contents[i][j] - (p / q) * (mat.contents[k - 1][j]);
+          }
+        }
+      }
+    }
+
+    double det = 1;
+    for (int i = 0; i < mat.rows; i++) {
+      det *= mat.contents[i][i];
+    }
+    return det;
+  }
+
+  // ===========
   // INVERSE BY ADJOIN
   // ===========
 
@@ -170,6 +228,37 @@ public class Matrix {
       }
     }
     return iMatrix;
+  }
+
+  // ===========
+  // INVERSE BY GAUSS JORDAN
+  // ===========
+
+  public boolean isInvertible() {
+    boolean matrixInvertible = true;
+    int i = 0;
+    while (matrixInvertible && i < this.rows) {
+      // Kalau ada yang 0 semua di kiri, maka salah
+      if (this.getIdxUtama(i) == this.rows) {
+        matrixInvertible = false;
+      }
+      i++;
+    }
+    return matrixInvertible;
+  }
+
+  public void inverseByOBE() {
+    Matrix matWithIdentity = this.copyWithIdentity();
+    matWithIdentity.gElimination();
+
+    if (matWithIdentity.isInvertible()) {
+      matWithIdentity.jElimination();
+
+      Matrix matInverse = matWithIdentity.getInverse();
+      matInverse.displayMatrix();
+    } else {
+      System.out.println("Matriks tidak memiliki balikan.");
+    }
   }
 
   // ===========
@@ -226,100 +315,11 @@ public class Matrix {
     return retArray;
   }
 
-  // ==========
-  // INTERPOLATION
-  // ==========
-
-  public void solveInterpolation(double x) {
-    double[] retArray;
-    Matrix eqMatrix = new Matrix(this.rows, this.rows + 1);
-    for (int i = 0; i < this.rows; i++) { // Proses semua titik yang diberikan
-      for (int j = 0; j < this.rows; j++) { // Buat matriks eqMatrix
-        eqMatrix.contents[i][j] = Math.pow(this.contents[i][0], j);
-      }
-      eqMatrix.contents[i][this.rows] = this.contents[i][1];
-    }
-    retArray = eqMatrix.solveByCramerRule();
-    double approx = 0;
-    System.out.println("Persamaan interpolasinya adalah: ");
-    for (int i = 0; i < retArray.length; i++) { // Proses retArray
-      if (i == 0) { // Konstanta
-        System.out.print(retArray[i]);
-      } else if (i == 1) {
-        System.out.print(" + " + retArray[i] + "x");
-      } else {
-        System.out.print(" + " + retArray[i] + "x^" + i);
-      }
-      approx += Math.pow(x, i) * retArray[i];
-    }
-    System.out.println("");
-    System.out.println("Taksiran untuk titik x=" + x + " adalah " + approx);
-  }
-
-  // ==========
-  // DOUBLE REGRESSION
-  // ==========
-
-  public void solveRegression(double[] xTaksiran) {
-    double[] retArray;
-    Matrix eqMatrix = new Matrix(this.cols, this.cols + 1);
-    // Pengisian eqMatrix
-    for (int i = 0; i < eqMatrix.rows; i++) {
-      if (i == 0) {
-        for (int j = 0; j < eqMatrix.cols; j++) {
-          if (j == 0) {
-            eqMatrix.contents[i][j] = (double) this.cols - 1;
-          } else {
-            double sum = 0;
-            for (int k = 0; k < this.rows; k++) {
-              sum += this.contents[k][j - 1];
-            }
-            eqMatrix.contents[i][j] = sum;
-          }
-        }
-      } else {
-        for (int j = 0; j < eqMatrix.cols; j++) {
-          if (j == 0) {
-            double sum = 0;
-            for (int k = 0; k < this.rows; k++) {
-              sum += this.contents[k][i - 1];
-            }
-            eqMatrix.contents[i][j] = sum;
-          } else {
-            double sum = 0;
-            for (int k = 0; k < this.rows; k++) {
-              sum += this.contents[k][i - 1] * this.contents[k][j - 1];
-            }
-            eqMatrix.contents[i][j] = sum;
-          }
-        }
-      }
-    }
-
-    retArray = eqMatrix.solveByCramerRule();
-    double approx = 0;
-    System.out.println("Persamaan regresinya adalah: ");
-    for (int i = 0; i < retArray.length; i++) {
-      if (i == 0) {
-        System.out.print("yi = " + retArray[i]);
-        approx += retArray[i];
-      } else {
-        System.out.print(" + " + retArray[i] + "x" + i + "i");
-        approx += retArray[i] * xTaksiran[i - 1];
-      }
-    }
-    System.out.println(" + epsilon_i");
-    System.out.print("Taksiran untuk");
-    for (int i = 0; i < xTaksiran.length; i++) {
-      System.out.print(" x" + (i + 1) + "=" + xTaksiran[i]);
-    }
-    System.out.println(" adalah " + approx);
-  }
-
   // ===========
   // GAUSSIAN ELIMINATION
   // ===========
 
+  // --------- lEONIE ----------
   public Matrix gaussianElimination() {
     Matrix m = this.copyMatrix();
     int row = 0;
@@ -360,10 +360,6 @@ public class Matrix {
     return m;
   }
 
-  // ===========
-  // GAUSS JORDAN ELIMINATION
-  // ===========
-
   public Matrix gaussJordanElimination() {
     Matrix m = this.gaussianElimination();
     for (int row = 1; row < m.rows; row++) {
@@ -392,10 +388,170 @@ public class Matrix {
     return m;
   }
 
+  // ---------- KHELLI ----------
+  public void gElimination() {
+    // GAUSS ELIMINATION
+    for (int k = 0; k < this.rows; k++) {
+      // Swap baris terlebih dahulu
+      int minIdx = k;
+      for (int row = k; row < this.rows; row++) {
+        if (this.getIdxUtama(row) == -1) {
+          minIdx = row;
+        } else if (this.getIdxUtama(row) < this.getIdxUtama(minIdx)) {
+          minIdx = row;
+        }
+      }
+      this.swapRow(k, minIdx);
+
+      if (this.getIdxUtama(k) == -1) {
+        this.swapRow(k, this.rows - 1);
+        // Yang 0 semua dipindahkan ke bawah sekali
+      }
+
+      // Baris yang harus dibagi untuk mendapat 1 utama
+      int idxUtama = this.getIdxUtama(k);
+      if (idxUtama != -1) {
+        double divisor = this.contents[k][idxUtama];
+        for (int col = 0; col < this.cols; col++) {
+          this.contents[k][col] = this.contents[k][col] / divisor;
+
+        }
+
+        // Reduksi baris di bawah 1 utama
+        for (int i = k + 1; i < this.rows; i++) {
+          double multiplier = this.contents[i][idxUtama];
+          for (int j = 0; j < this.cols; j++) {
+            this.contents[i][j] -= multiplier * this.contents[k][j];
+          }
+        }
+      }
+    }
+  }
+
+  public void jElimination() {
+    // JORDAN ELIMINATION
+    // Harus lakukan gauss dulu ya ;)
+    for (int k = this.rows - 1; k > -1; k--) {
+      int idxUtama = this.getIdxUtama(k);
+
+      // Reduksi baris di atas 1 utama
+      for (int i = k - 1; i > -1; i--) {
+        double multiplier = this.contents[i][idxUtama];
+        for (int j = 0; j < this.cols; j++) {
+          this.contents[i][j] -= multiplier * this.contents[k][j];
+        }
+      }
+    }
+  }
+
   // ===========
   // EQUATION SOLVING BY GAUSS JORDAN
   // ===========
 
+  // GAUSS
+  public void solveByGauss() {
+    Matrix mat = this.copyMatrix();
+    mat.gElimination();
+
+    // Hitung solusi -> sebanyak kolom - 1
+    int lastRow = mat.rows - 1;
+    int lastCol = mat.cols - 1;
+    int idxUtama;
+
+    // Cek apakah punya solusi atau tidak
+    boolean matrixSolvable = true;
+    for (int i = lastRow; i > -1; i--) {
+      // Kalau ada yang elemen utamanya di daerah paling kanan,
+      // maka tidak solveable.
+      if (mat.getIdxUtama(i) == lastCol) {
+        matrixSolvable = false;
+      }
+    }
+
+    if (matrixSolvable) {
+      Matrix matSols = new Matrix(mat.cols - 1, mat.cols);
+
+      for (int i = 0; i < matSols.rows; i++) {
+        for (int j = 0; j < matSols.cols; j++) {
+          matSols.contents[i][j] = 0;
+        }
+      }
+
+      for (int j = 0; j < matSols.cols - 1; j++) {
+        matSols.contents[j][0] = valUndef;
+      }
+
+      for (int i = lastRow; i > -1; i--) {
+        idxUtama = mat.getIdxUtama(i);
+        if (idxUtama != -1) {
+          // Inisialisasi Koefisien
+          for (int col = idxUtama + 2; col < matSols.cols; col++) {
+            matSols.contents[idxUtama][col] = -1 * mat.contents[i][col - 1];
+          }
+
+          // Inisialisasi Konstanta
+          matSols.contents[idxUtama][0] = mat.contents[i][lastCol];
+
+          // Operasi
+          for (int j = 1; j < matSols.cols; j++) {
+            double coeff = matSols.contents[idxUtama][j];
+            for (int col = 0; col < matSols.cols; col++) {
+              if (matSols.contents[j - 1][col] != valUndef) {
+                matSols.contents[idxUtama][col] += coeff * matSols.contents[j - 1][col];
+              }
+            }
+            if (matSols.contents[j - 1][0] != valUndef) {
+              matSols.contents[idxUtama][j] = 0;
+            }
+          }
+
+        }
+      }
+
+      // I/O Field
+      for (int i = 0; i < matSols.rows; i++) {
+        boolean isFirst = true;
+        System.out.printf("x%d = ", i + 1);
+        double constant = matSols.contents[i][0];
+
+        int asciiCounter = 97;
+        if (constant != valUndef && constant != 0) {
+          System.out.printf("%f", constant);
+          isFirst = false;
+        }
+        if (constant == valUndef) {
+          System.out.printf("" + (char) (asciiCounter + i));
+          isFirst = false;
+        }
+        for (int j = 1; j < matSols.cols; j++) {
+          if (matSols.contents[i][j] < 0) {
+            if (!isFirst) {
+              System.out.printf(" - " + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+            } else {
+              System.out.printf("-" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+              isFirst = false;
+            }
+          } else if (matSols.contents[i][j] > 0) {
+            if (!isFirst) {
+              System.out.printf(" + " + matSols.contents[i][j] + (char) (asciiCounter));
+            } else {
+              System.out.printf("" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+              isFirst = false;
+            }
+          } else {
+            System.out.printf("");
+          }
+          asciiCounter++;
+        }
+        System.out.println();
+      }
+
+    } else {
+      System.out.println("SPL tidak memiliki solusi.");
+    }
+  }
+
+  // GAUSS JORDAN
   public String[] solveByGaussJordan() {
     Matrix m = this.gaussJordanElimination();
     String[] retArray;
@@ -491,4 +647,95 @@ public class Matrix {
     }
     return retArray;
   }
+
+  // ==========
+  // INTERPOLATION
+  // ==========
+
+  public void solveInterpolation(double x) {
+    double[] retArray;
+    Matrix eqMatrix = new Matrix(this.rows, this.rows + 1);
+    for (int i = 0; i < this.rows; i++) { // Proses semua titik yang diberikan
+      for (int j = 0; j < this.rows; j++) { // Buat matriks eqMatrix
+        eqMatrix.contents[i][j] = Math.pow(this.contents[i][0], j);
+      }
+      eqMatrix.contents[i][this.rows] = this.contents[i][1];
+    }
+    retArray = eqMatrix.solveByCramerRule();
+    double approx = 0;
+    System.out.println("Persamaan interpolasinya adalah: ");
+    for (int i = 0; i < retArray.length; i++) { // Proses retArray
+      if (i == 0) { // Konstanta
+        System.out.print(retArray[i]);
+      } else if (i == 1) {
+        System.out.print(" + " + retArray[i] + "x");
+      } else {
+        System.out.print(" + " + retArray[i] + "x^" + i);
+      }
+      approx += Math.pow(x, i) * retArray[i];
+    }
+    System.out.println("");
+    System.out.println("Taksiran untuk titik x=" + x + " adalah " + approx);
+  }
+
+  // ==========
+  // DOUBLE REGRESSION
+  // ==========
+
+  public void solveRegression(double[] xTaksiran) {
+    double[] retArray;
+    Matrix eqMatrix = new Matrix(this.cols, this.cols + 1);
+    // Pengisian eqMatrix
+    for (int i = 0; i < eqMatrix.rows; i++) {
+      if (i == 0) {
+        for (int j = 0; j < eqMatrix.cols; j++) {
+          if (j == 0) {
+            eqMatrix.contents[i][j] = (double) this.cols - 1;
+          } else {
+            double sum = 0;
+            for (int k = 0; k < this.rows; k++) {
+              sum += this.contents[k][j - 1];
+            }
+            eqMatrix.contents[i][j] = sum;
+          }
+        }
+      } else {
+        for (int j = 0; j < eqMatrix.cols; j++) {
+          if (j == 0) {
+            double sum = 0;
+            for (int k = 0; k < this.rows; k++) {
+              sum += this.contents[k][i - 1];
+            }
+            eqMatrix.contents[i][j] = sum;
+          } else {
+            double sum = 0;
+            for (int k = 0; k < this.rows; k++) {
+              sum += this.contents[k][i - 1] * this.contents[k][j - 1];
+            }
+            eqMatrix.contents[i][j] = sum;
+          }
+        }
+      }
+    }
+
+    retArray = eqMatrix.solveByCramerRule();
+    double approx = 0;
+    System.out.println("Persamaan regresinya adalah: ");
+    for (int i = 0; i < retArray.length; i++) {
+      if (i == 0) {
+        System.out.print("yi = " + retArray[i]);
+        approx += retArray[i];
+      } else {
+        System.out.print(" + " + retArray[i] + "x" + i + "i");
+        approx += retArray[i] * xTaksiran[i - 1];
+      }
+    }
+    System.out.println(" + epsilon_i");
+    System.out.print("Taksiran untuk");
+    for (int i = 0; i < xTaksiran.length; i++) {
+      System.out.print(" x" + (i + 1) + "=" + xTaksiran[i]);
+    }
+    System.out.println(" adalah " + approx);
+  }
+
 }
