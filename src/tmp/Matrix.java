@@ -63,21 +63,6 @@ public class Matrix {
     return idxUndef;
   }
 
-  public boolean isConstantOnly(int row) {
-    boolean constant = true;
-    int col = 1;
-    if (this.contents[row][0] == idxUndef) {
-      constant = false;
-    }
-    while (col < this.cols && constant) {
-      if (this.contents[row][col] != 0) {
-        constant = false;
-      }
-      col++;
-    }
-    return constant;
-  }
-
   // ===========
   // COPY MATRIX
   // ===========

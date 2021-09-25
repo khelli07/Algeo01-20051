@@ -146,10 +146,8 @@ public class Gauss {
                 System.out.println();
             }
 
-        } else
-
-        {
-            System.out.println("Martriks tidak memiliki solusi.");
+        } else {
+            System.out.println("SPL tidak memiliki solusi.");
         }
     }
 }
