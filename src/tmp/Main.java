@@ -63,6 +63,29 @@ public class Main {
     }
   }
 
+  static void hitungSPLGaussJordan() {
+    System.out.print("Masukkan banyak baris: ");
+    int rows = sc.nextInt();
+    System.out.print("Masukkan banyak kolom: ");
+    int cols = sc.nextInt();
+
+    Matrix mat = new Matrix(rows, cols);
+
+    System.out.println("Masukkan matriks: ");
+    mat.readMatrix();
+
+    
+    System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): ");
+    String[] res = mat.solveByGaussJordan();
+    if (res[0] == "false") {
+      System.out.println("Solusi tidak ada");
+    } else {
+      for (int i = 0; i < res.length; i ++) {
+        System.out.println("x" + (i + 1) + " = " + res[i]);
+      }
+    }
+  }
+
   // ==========
   // MENU PERHITUNGAN INVERS
   // ==========
@@ -163,6 +186,9 @@ public class Main {
     System.out.println("4. Kaidah Cramer");
     int op = sc.nextInt();
     switch (op) {
+      case 2:
+        hitungSPLGaussJordan();
+        break;
       case 3:
         hitungSPLInvers();
         break;

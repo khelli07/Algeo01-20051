@@ -310,4 +310,180 @@ public class Matrix {
     }
     System.out.println(" adalah " + approx);
   }
+
+  // ===========
+  // GAUSSIAN ELIMINATION
+  // ===========
+
+  public Matrix gaussianElimination() {
+    Matrix m = this.copyMatrix();
+    int row = 0;
+    for (int col = 0; col < this.cols; col++) {
+      if (row < m.rows) {
+        // Mencari nilai maksimum dari kolom
+        double maxVal = m.contents[row][col];
+        int maxIdx = row;
+        for (int i = row + 1; i < m.rows; i++) {
+          if (m.contents[i][col] > maxVal) {
+            maxVal = m.contents[i][col];
+            maxIdx = i;
+          }
+        }
+        // Tukar baris yang mengandung nilai maksimum ke baris awal
+        if (maxIdx != row) {
+          m.swapRow(row, maxIdx);
+        }
+        if (m.contents[row][col] != 0) {
+          // Ubah nilai tidak nol pertama baris awal menjadi 1
+          double x = m.contents[row][col];
+          for (int i = col; i < m.cols; i++) {
+            m.contents[row][i] /= x;
+          }
+          // Ubah nilai di bawah elemen pada baris row dan kolom col menjadi 0
+          for (int i = row + 1; i < m.rows; i++) {
+            if (m.contents[i][col] != 0) {
+              x = m.contents[i][col];
+              for (int j = col; j < m.cols; j++) {
+                m.contents[i][j] -= x * m.contents[row][j];
+              }
+            }
+          }
+          row += 1;
+        }
+      } 
+    }
+    return m;
+  }    
+
+  // ===========
+  // GAUSS JORDAN ELIMINATION
+  // ===========
+
+  public Matrix gaussJordanElimination() {
+    Matrix m = this.gaussianElimination();
+    for (int row = 1; row < m.rows; row++) {
+      // Cari indeks kolom yang mengandung nilai 1 pada matriks
+      boolean isFound = false;
+      int col = 0;
+      while (col < (m.cols-1) && !(isFound)) {
+        if (m.contents[row][col] == 1) {
+          isFound = true;
+        } else {
+          col += 1;
+        }
+      }
+      if (isFound) {
+        // Ubah nilai di atas elemen pada baris row dan kolom col menjadi 0
+        for (int i = (row - 1); i >= 0; i--) {
+          if (m.contents[i][col] != 0) {
+            double x = m.contents[i][col];
+            for (int j = col; j < m.cols; j++) {
+              m.contents[i][j] -= x * m.contents[row][j];
+            }
+          }
+        }
+      }
+    }
+    return m;
+  }  
+
+  // ===========
+  // EQUATION SOLVING BY GAUSS JORDAN
+  // =========== 
+
+  public String[] solveByGaussJordan() {
+    Matrix m = this.gaussJordanElimination();
+    String[] retArray;
+    retArray = new String[m.cols - 1];
+    String[] var = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+    String[] varArray;
+    varArray = new String[m.cols - 1];
+    double[] valArray;
+    valArray = new double[m.cols - 1];
+    for (int i = 0; i < m.cols - 1; i++) {
+      varArray[i] = var[i];
+      valArray[i] = -999;
+    }
+
+    boolean flag = true;   // true ketika spl memiliki solusi
+    int row = m.rows - 1;
+    int col;
+    boolean isFound;
+    double cons;
+
+    while (row >= 0 && flag) {
+      isFound = false;
+      col = 0;
+      while (col < m.cols && flag && !(isFound)) {
+        if (m.contents[row][col] != 0) {
+          isFound = true;
+          if (col == m.cols - 1) {
+            flag = false;
+          } else {
+            valArray[col] = m.contents[row][m.cols-1];
+            varArray[col] = ""; //
+            for (int i = col + 1; i < m.cols - 1; i++) { // loop utk mengecek nilai elemen pada kolom berikutnya
+              if (m.contents[row][i] != 0) {
+                if (valArray[i] != -999) { // jika variabel memiliki nilai
+                  valArray[col] -= m.contents[row][i] * valArray[i];
+                } else { // jika variabel tidak memiliki nilai
+                  cons = -1 * m.contents[row][i];
+                  if (varArray[col] == "") {
+                    if (cons > 0) {
+                      if (cons == 1) {
+                        varArray[col] = varArray[i];
+                      } else if (cons == -1) {
+                        varArray[col] = "-" + varArray[i];
+                      } 
+                      else {
+                        varArray[col] = cons + varArray[i];
+                      }
+                    } else {
+                      varArray[col] = "-" + m.contents[row][i] + varArray[i];
+                    }
+                  } else {
+                    if (cons > 0) {
+                      if (cons == 1) {
+                        varArray[col] = varArray[col] + " + " + varArray[i];
+                      } else if (cons == -1) {
+                        varArray[col] = varArray[col] + " - " + varArray[i];
+                      }else {
+                        varArray[col] = varArray[col] + " + " + cons + varArray[i];
+                      }
+                    } else {
+                      varArray[col] = varArray[col] + " - " + m.contents[row][i] + varArray[i];
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        col += 1;
+      }
+      row -= 1;
+    }
+    if (flag) {
+      for (int i = 0; i < m.cols - 1; i++) { // menyatukan varArray dan valArray
+        if (varArray[i] == "") {
+          if (valArray[i] != -999) {
+            retArray[i] = "" + valArray[i];
+          }
+        } else {
+          if (valArray[i] != -999 && valArray[i] != 0) {
+            if (valArray[i] > 0) {
+              retArray[i] = varArray[i] + " + " + valArray[i];
+            } else {
+              retArray[i] = varArray[i] + " - " + (-1 * valArray[i]);
+            }
+          } else {
+            retArray[i] = varArray[i];
+          }
+        }
+      }  
+    } else {
+      retArray[0] = "false";
+    }
+    return retArray;
+  }
 }
