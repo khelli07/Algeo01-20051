@@ -32,7 +32,12 @@ public class Matrix {
   public void displayMatrix() {
     for (int i = 0; i < this.rows; i++) {
       for (int j = 0; j < this.cols; j++) {
-        System.out.print(this.contents[i][j] + " ");
+        // Menghindari signed zero :-(
+        if (this.contents[i][j] == 0) {
+          System.out.print(0.0 + " ");
+        } else {
+          System.out.print(this.contents[i][j] + " ");
+        }
       }
       System.out.println("");
     }
@@ -56,6 +61,21 @@ public class Matrix {
       }
     }
     return idxUndef;
+  }
+
+  public boolean isConstantOnly(int row) {
+    boolean constant = true;
+    int col = 1;
+    if (this.contents[row][0] == idxUndef) {
+      constant = false;
+    }
+    while (col < this.cols && constant) {
+      if (this.contents[row][col] != 0) {
+        constant = false;
+      }
+      col++;
+    }
+    return constant;
   }
 
   // ===========
@@ -350,10 +370,10 @@ public class Matrix {
           }
           row += 1;
         }
-      } 
+      }
     }
     return m;
-  }    
+  }
 
   // ===========
   // GAUSS JORDAN ELIMINATION
@@ -365,7 +385,7 @@ public class Matrix {
       // Cari indeks kolom yang mengandung nilai 1 pada matriks
       boolean isFound = false;
       int col = 0;
-      while (col < (m.cols-1) && !(isFound)) {
+      while (col < (m.cols - 1) && !(isFound)) {
         if (m.contents[row][col] == 1) {
           isFound = true;
         } else {
@@ -385,17 +405,18 @@ public class Matrix {
       }
     }
     return m;
-  }  
+  }
 
   // ===========
   // EQUATION SOLVING BY GAUSS JORDAN
-  // =========== 
+  // ===========
 
   public String[] solveByGaussJordan() {
     Matrix m = this.gaussJordanElimination();
     String[] retArray;
     retArray = new String[m.cols - 1];
-    String[] var = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+    String[] var = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
+        "u", "v", "w", "x", "y", "z" };
     String[] varArray;
     varArray = new String[m.cols - 1];
     double[] valArray;
@@ -405,7 +426,7 @@ public class Matrix {
       valArray[i] = -999;
     }
 
-    boolean flag = true;   // true ketika spl memiliki solusi
+    boolean flag = true; // true ketika spl memiliki solusi
     int row = m.rows - 1;
     int col;
     boolean isFound;
@@ -420,7 +441,7 @@ public class Matrix {
           if (col == m.cols - 1) {
             flag = false;
           } else {
-            valArray[col] = m.contents[row][m.cols-1];
+            valArray[col] = m.contents[row][m.cols - 1];
             varArray[col] = ""; //
             for (int i = col + 1; i < m.cols - 1; i++) { // loop utk mengecek nilai elemen pada kolom berikutnya
               if (m.contents[row][i] != 0) {
@@ -434,8 +455,7 @@ public class Matrix {
                         varArray[col] = varArray[i];
                       } else if (cons == -1) {
                         varArray[col] = "-" + varArray[i];
-                      } 
-                      else {
+                      } else {
                         varArray[col] = cons + varArray[i];
                       }
                     } else {
@@ -447,7 +467,7 @@ public class Matrix {
                         varArray[col] = varArray[col] + " + " + varArray[i];
                       } else if (cons == -1) {
                         varArray[col] = varArray[col] + " - " + varArray[i];
-                      }else {
+                      } else {
                         varArray[col] = varArray[col] + " + " + cons + varArray[i];
                       }
                     } else {
@@ -480,7 +500,7 @@ public class Matrix {
             retArray[i] = varArray[i];
           }
         }
-      }  
+      }
     } else {
       retArray[0] = "false";
     }
