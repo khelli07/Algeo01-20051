@@ -11,7 +11,7 @@ public class Main {
   // ==========
 
   static void hitungDeterminantCofactor() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -30,7 +30,7 @@ public class Main {
   }
 
   static void hitungDeterminantOBE() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -51,7 +51,7 @@ public class Main {
   // ==========
 
   static void hitungSPLCramer() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -76,7 +76,7 @@ public class Main {
   }
 
   static void hitungSPLInvers() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -101,7 +101,7 @@ public class Main {
   }
 
   static void hitungSPLGauss() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -123,7 +123,7 @@ public class Main {
   }
 
   static void hitungSPLGaussJordan() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -156,7 +156,7 @@ public class Main {
   // ==========
 
   static void cariInversAdjoin() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -176,7 +176,7 @@ public class Main {
   }
 
   static void cariInversOBE() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
 
     if (prompt == 1) {
@@ -200,7 +200,7 @@ public class Main {
   // ==========
 
   static void interpolasi() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
     
     if (prompt == 1) {
@@ -225,7 +225,7 @@ public class Main {
   // ==========
 
   static void regresiBerganda() {
-    System.out.print("Masukan teks (0) atau input (1)? (t/i): ");
+    System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
     
     System.out.println(prompt);
