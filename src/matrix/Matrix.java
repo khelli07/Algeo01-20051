@@ -653,7 +653,7 @@ public class Matrix {
   // ==========
 
   public void solveInterpolation(double x) {
-    double[] retArray;
+    String[] retArray;
     Matrix eqMatrix = new Matrix(this.rows, this.rows + 1);
     for (int i = 0; i < this.rows; i++) { // Proses semua titik yang diberikan
       for (int j = 0; j < this.rows; j++) { // Buat matriks eqMatrix
@@ -661,7 +661,7 @@ public class Matrix {
       }
       eqMatrix.contents[i][this.rows] = this.contents[i][1];
     }
-    retArray = eqMatrix.solveByCramerRule();
+    retArray = eqMatrix.solveByGaussJordan();
     double approx = 0;
     System.out.println("Persamaan interpolasinya adalah: ");
     for (int i = 0; i < retArray.length; i++) { // Proses retArray
@@ -672,7 +672,7 @@ public class Matrix {
       } else {
         System.out.print(" + " + retArray[i] + "x^" + i);
       }
-      approx += Math.pow(x, i) * retArray[i];
+      approx += Math.pow(x, i) * Double.parseDouble(retArray[i]);
     }
     System.out.println("");
     System.out.println("Taksiran untuk titik x=" + x + " adalah " + approx);
@@ -683,14 +683,14 @@ public class Matrix {
   // ==========
 
   public void solveRegression(double[] xTaksiran) {
-    double[] retArray;
+    String[] retArray;
     Matrix eqMatrix = new Matrix(this.cols, this.cols + 1);
     // Pengisian eqMatrix
     for (int i = 0; i < eqMatrix.rows; i++) {
       if (i == 0) {
         for (int j = 0; j < eqMatrix.cols; j++) {
           if (j == 0) {
-            eqMatrix.contents[i][j] = (double) this.cols - 1;
+            eqMatrix.contents[i][j] = (double) this.rows;
           } else {
             double sum = 0;
             for (int k = 0; k < this.rows; k++) {
@@ -718,16 +718,18 @@ public class Matrix {
       }
     }
 
-    retArray = eqMatrix.solveByCramerRule();
+    eqMatrix.displayMatrix();
+
+    retArray = eqMatrix.solveByGaussJordan();
     double approx = 0;
     System.out.println("Persamaan regresinya adalah: ");
     for (int i = 0; i < retArray.length; i++) {
       if (i == 0) {
         System.out.print("yi = " + retArray[i]);
-        approx += retArray[i];
+        approx += Double.parseDouble(retArray[i]);
       } else {
         System.out.print(" + " + retArray[i] + "x" + i + "i");
-        approx += retArray[i] * xTaksiran[i - 1];
+        approx += Double.parseDouble(retArray[i]) * xTaksiran[i - 1];
       }
     }
     System.out.println(" + epsilon_i");
