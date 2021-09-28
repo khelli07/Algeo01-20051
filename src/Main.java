@@ -1,4 +1,4 @@
-package src.matrix;
+package src;
 
 import java.util.Scanner;
 
@@ -43,7 +43,7 @@ public class Main {
       mat.readMatrix();
       System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByOBE());
     } else {
-      
+
     }
   }
   // ==========
@@ -171,7 +171,7 @@ public class Main {
       System.out.println("Inversnya adalah: ");
       mat.createInverseMatrix().displayMatrix();
     } else {
-      
+
     }
   }
 
@@ -202,7 +202,7 @@ public class Main {
   static void interpolasi() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-    
+
     if (prompt == 1) {
       System.out.print("Masukkan orde polinomial: ");
       int n = sc.nextInt();
@@ -227,7 +227,7 @@ public class Main {
   static void regresiBerganda() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-    
+
     System.out.println(prompt);
     if (prompt == 1) {
       System.out.print("Masukkan nilai n (banyak variabel): ");

@@ -1,4 +1,4 @@
-package src.matrix;
+package src;
 
 import java.util.Scanner;
 
@@ -92,38 +92,6 @@ public class Matrix {
     for (int i = 0; i < this.rows; i++) {
       mOut.contents[i][0] = this.contents[i][this.cols - 1];
     }
-    return mOut;
-  }
-
-  public Matrix copyWithIdentity() {
-    Matrix mOut = new Matrix(this.rows, this.cols * 2);
-    for (int i = 0; i < mOut.rows; i++) {
-      for (int j = 0; j < this.rows; j++) {
-        mOut.contents[i][j] = this.contents[i][j];
-      }
-
-      for (int j = this.rows; j < mOut.cols; j++) {
-        if (j == i + this.rows) {
-          mOut.contents[i][j] = 1;
-        } else {
-          mOut.contents[i][j] = 0;
-        }
-      }
-    }
-
-    return mOut;
-  }
-
-  public Matrix getInverse() {
-    int cols = this.cols / 2;
-    Matrix mOut = new Matrix(this.rows, cols);
-
-    for (int i = 0; i < this.rows; i++) {
-      for (int j = cols; j < this.cols; j++) {
-        mOut.contents[i][j - cols] = this.contents[i][j];
-      }
-    }
-
     return mOut;
   }
 
@@ -245,6 +213,38 @@ public class Matrix {
       i++;
     }
     return matrixInvertible;
+  }
+
+  public Matrix copyWithIdentity() {
+    Matrix mOut = new Matrix(this.rows, this.cols * 2);
+    for (int i = 0; i < mOut.rows; i++) {
+      for (int j = 0; j < this.rows; j++) {
+        mOut.contents[i][j] = this.contents[i][j];
+      }
+
+      for (int j = this.rows; j < mOut.cols; j++) {
+        if (j == i + this.rows) {
+          mOut.contents[i][j] = 1;
+        } else {
+          mOut.contents[i][j] = 0;
+        }
+      }
+    }
+
+    return mOut;
+  }
+
+  public Matrix getInverse() {
+    int cols = this.cols / 2;
+    Matrix mOut = new Matrix(this.rows, cols);
+
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = cols; j < this.cols; j++) {
+        mOut.contents[i][j - cols] = this.contents[i][j];
+      }
+    }
+
+    return mOut;
   }
 
   public void inverseByOBE() {
