@@ -2,8 +2,10 @@ package src;
 
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class Matrix {
   static double valUndef = -999.0;
@@ -33,6 +35,35 @@ public class Matrix {
       for (int j = 0; j < this.cols; j++) {
         this.contents[i][j] = sc.nextDouble();
       }
+    }
+  }
+
+  public void readMatrixFromFile() {
+    System.out.print("Masukkan nama file (contoh: a.txt): ");
+    String fileName = sc.next();
+    Scanner reader = null;
+    try {
+      reader = new Scanner(new File(fileName));
+      ArrayList<String> lines = new ArrayList<String>();
+      while (reader.hasNextLine()) {
+        lines.add(reader.nextLine());
+      }
+      //  Proses lines
+      int rows = lines.size();
+      String[] elmts = lines.get(0).split(" ", -1);
+      int cols = elmts.length;
+      // Buat matrix
+      this.contents = new double[rows][cols];
+      this.rows = rows;
+      this.cols = cols;
+      for (int i = 0; i < this.rows; i ++) {
+        String[] line = lines.get(i).split(" ", -1);
+        for (int j = 0; j < this.cols; j ++) {
+          this.contents[i][j] = Double.parseDouble(line[j]);
+        }
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println("File " + fileName + " tidak ditemukan.");
     }
   }
 

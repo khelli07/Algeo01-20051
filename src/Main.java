@@ -2,6 +2,7 @@ package src;
 
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -16,18 +17,23 @@ public class Main {
   static void hitungDeterminantCofactor() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
+    Matrix mat = new Matrix(0, 0);
 
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks persegi: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
 
+    if (mat.matrixSize() > 0) {
       System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByCofactor());
-
+  
       System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
       prompt = sc.nextInt();
       if (prompt == 1) {
@@ -36,23 +42,26 @@ public class Main {
         namaFile = sc.next();
         mat.writeInputMatrix(namaFile, "Determinan dari matriks tersebut adalah " + mat.getDeterminantByCofactor());
       }
-    } else {
-
     }
   }
 
   static void hitungDeterminantOBE() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
+    Matrix mat = new Matrix(0, 0);
 
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks persegi: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByOBE());
 
       System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
@@ -63,8 +72,6 @@ public class Main {
         namaFile = sc.next();
         mat.writeInputMatrix(namaFile, "Determinan dari matriks tersebut adalah " + mat.getDeterminantByOBE());
       }
-    } else {
-      
     }
   }
   // ==========
@@ -74,18 +81,21 @@ public class Main {
   static void hitungSPLCramer() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
       int rows = sc.nextInt();
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       double[] res = mat.solveByCramerRule();
       if (res.length > 0) {
         System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Cramer): ");
@@ -113,26 +123,27 @@ public class Main {
         }
         mat.writeInputMatrix(namaFile, output);
       }
-    } else {
-
     }
   }
 
   static void hitungSPLInvers() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
       int rows = sc.nextInt();
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-      
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       double[] res = mat.solveByInverse();
       if (res.length > 0) {
         System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
@@ -160,14 +171,13 @@ public class Main {
         }
         mat.writeInputMatrix(namaFile, output);
       }
-    } else {
-
-    }
+    } 
   }
 
   static void hitungSPLGauss() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
+    Matrix mat = new Matrix(0, 0);
 
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
@@ -175,33 +185,37 @@ public class Main {
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss): ");
       mat.solveByGauss();
-    } else {
-
     }
   }
 
   static void hitungSPLGaussJordan() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
       int rows = sc.nextInt();
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       String[] res = mat.solveByGaussJordan();
       if (res[0] == "false") {
         System.out.println("Solusi persamaan tersebut tidak ada.");
@@ -229,8 +243,6 @@ public class Main {
         }
         mat.writeInputMatrix(namaFile, output);
       }
-    } else {
-
     }
   }
 
@@ -241,16 +253,19 @@ public class Main {
   static void cariInversAdjoin() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       Matrix inverse = mat.createInverseMatrix();
 
       if (inverse.matrixSize() > 0) {
@@ -287,28 +302,27 @@ public class Main {
         }
         mat.writeInputMatrix(namaFile, output);
       }
-    } else {
-      
     }
   }
 
   static void cariInversOBE() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.println("Inversnya adalah: ");
       mat.inverseByOBE();
-    } else {
-
     }
   }
 
