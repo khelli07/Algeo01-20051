@@ -233,7 +233,7 @@ public class Main {
         System.out.print("Masukkan nama file (contoh: a.txt): ");
         namaFile = sc.next();
         String output = "";
-        if (res.length > 0) {
+        if (res[0] != "false") {
           output += "Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): \n";
           for (int i = 0; i < res.length; i++) {
             output += "x" + (i + 1) + " = " + res[i] + "\n";
