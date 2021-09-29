@@ -1,0 +1,9 @@
+Matriks masukan: 
+-120.0 60.0 0.0 -1300.0 
+40.0 -80.0 0.0 0.0 
+80.0 20.0 -150.0 -200.0 
+Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): 
+x1 = 14.444444444444445
+x2 = 7.222222222222221
+x3 = 10.0
+
