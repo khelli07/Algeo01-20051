@@ -1,22 +1,21 @@
-# *Tugas Besar 1* - IF2123 Aljabar Linear dan Geometri
-## **Teknik Informatika Institut Teknologi Bandung**
-### Tahun ajaran 2021/2022
-<br>
+## *Tugas Besar 1* - IF2123 Aljabar Linear dan Geometri
+### **Teknik Informatika Institut Teknologi Bandung**
+Tahun ajaran 2021/2022
 <br>
 
-### **Dibuat oleh:**
-### 13520051 &nbsp; Flavia Beatrix Leoni A. S.
-### 13520115 &nbsp; Maria Khelli
-### 13520119 &nbsp; Marchotridyo 
+**Dibuat oleh:** <br>
+13520051 &nbsp; Flavia Beatrix Leoni A. S. <br>
+13520115 &nbsp; Maria Khelli <br>
+13520119 &nbsp; Marchotridyo <br>
 
 <br>
 
 # Struktur Direktori Program
-* ### bin : file berekstensi .class (java bytecode)
-* ### doc : laporan tugas besar
-* ### src : source code utama
-* ### test : soal dan solusi dari uji kasus
-* ### lib : file berekstensi .jar, berfunsi sebagai library
+* bin : file berekstensi .class (java bytecode)
+* doc : laporan tugas besar
+* src : source code utama
+* test : soal dan solusi dari uji kasus
+* lib : file berekstensi .jar, berfunsi sebagai library
 
 <br>
 
