@@ -43,14 +43,6 @@ public class Matrix {
     }
   }
 
-  public void swapRow(int row1, int row2) {
-    for (int j = 0; j < this.cols; j++) {
-      double temp = this.contents[row1][j];
-      this.contents[row1][j] = this.contents[row2][j];
-      this.contents[row2][j] = temp;
-    }
-  }
-
   public int getIdxUtama(int row) {
     int col = 0;
     while (col < this.cols) {
@@ -93,6 +85,14 @@ public class Matrix {
       mOut.contents[i][0] = this.contents[i][this.cols - 1];
     }
     return mOut;
+  }
+
+  public void swapRow(int row1, int row2) {
+    for (int j = 0; j < this.cols; j++) {
+      double temp = this.contents[row1][j];
+      this.contents[row1][j] = this.contents[row2][j];
+      this.contents[row2][j] = temp;
+    }
   }
 
   // ===========
