@@ -56,7 +56,7 @@ public class Matrix {
       while (reader.hasNextLine()) {
         lines.add(reader.nextLine());
       }
-      //  Proses lines
+      // Proses lines
       int rows = lines.size();
       String[] elmts = lines.get(0).split(" ", -1);
       int cols = elmts.length;
@@ -64,9 +64,9 @@ public class Matrix {
       this.contents = new double[rows][cols];
       this.rows = rows;
       this.cols = cols;
-      for (int i = 0; i < this.rows; i ++) {
+      for (int i = 0; i < this.rows; i++) {
         String[] line = lines.get(i).split(" ", -1);
-        for (int j = 0; j < this.cols; j ++) {
+        for (int j = 0; j < this.cols; j++) {
           this.contents[i][j] = Double.parseDouble(line[j]);
         }
       }
@@ -86,7 +86,7 @@ public class Matrix {
       while (reader.hasNextLine()) {
         lines.add(reader.nextLine());
       }
-      //  Proses lines
+      // Proses lines
       int rows = lines.size();
       String[] elmts = lines.get(0).split(" ", -1);
       int cols = elmts.length;
@@ -94,9 +94,9 @@ public class Matrix {
       this.contents = new double[rows][cols];
       this.rows = rows;
       this.cols = cols;
-      for (int i = 0; i < this.rows; i ++) {
+      for (int i = 0; i < this.rows; i++) {
         String[] line = lines.get(i).split(" ", -1);
-        for (int j = 0; j < this.cols; j ++) {
+        for (int j = 0; j < this.cols; j++) {
           this.contents[i][j] = Double.parseDouble(line[j]);
         }
       }
@@ -119,8 +119,6 @@ public class Matrix {
     }
   }
 
-<<<<<<< HEAD
-=======
   public void writeInputMatrix(String fileName, String additionalString) {
     try {
       File file = new File(fileName);
@@ -128,7 +126,7 @@ public class Matrix {
       if (file.createNewFile()) {
         PrintWriter pw = new PrintWriter(file);
         pw.println("Matriks masukan: ");
-          for (int i = 0; i < this.rows; i++) {
+        for (int i = 0; i < this.rows; i++) {
           for (int j = 0; j < this.cols; j++) {
             // Menghindari signed zero :-(
             if (this.contents[i][j] == 0) {
@@ -152,15 +150,6 @@ public class Matrix {
     }
   }
 
-  public void swapRow(int row1, int row2) {
-    for (int j = 0; j < this.cols; j++) {
-      double temp = this.contents[row1][j];
-      this.contents[row1][j] = this.contents[row2][j];
-      this.contents[row2][j] = temp;
-    }
-  }
-
->>>>>>> 5268f2722d77f010890768cabcc510c31f4b7676
   public int getIdxUtama(int row) {
     int col = 0;
     while (col < this.cols) {
@@ -205,14 +194,14 @@ public class Matrix {
     return mOut;
   }
 
-<<<<<<< HEAD
   public void swapRow(int row1, int row2) {
     for (int j = 0; j < this.cols; j++) {
       double temp = this.contents[row1][j];
       this.contents[row1][j] = this.contents[row2][j];
       this.contents[row2][j] = temp;
     }
-=======
+  }
+
   public Matrix copyWithIdentity() {
     Matrix mOut = new Matrix(this.rows, this.cols * 2);
     for (int i = 0; i < mOut.rows; i++) {
@@ -243,7 +232,6 @@ public class Matrix {
     }
 
     return mOut;
->>>>>>> 5268f2722d77f010890768cabcc510c31f4b7676
   }
 
   // ===========
@@ -704,7 +692,7 @@ public class Matrix {
     } else {
       System.out.println("SPL tidak memiliki solusi.");
     }
-    
+
     System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
     int prompt = sc.nextInt();
     if (prompt == 1) {
@@ -734,10 +722,12 @@ public class Matrix {
           for (int j = 1; j < matSols.cols; j++) {
             if (matSols.contents[i][j] < 0) {
               if (!isFirst) {
-                // System.out.printf(" - " + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+                // System.out.printf(" - " + (-1 * matSols.contents[i][j]) + (char)
+                // (asciiCounter));
                 output += " - " + (-1 * matSols.contents[i][j]) + (char) (asciiCounter);
               } else {
-                // System.out.printf("-" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+                // System.out.printf("-" + (-1 * matSols.contents[i][j]) + (char)
+                // (asciiCounter));
                 output += "-" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter);
                 isFirst = false;
               }
@@ -746,7 +736,8 @@ public class Matrix {
                 // System.out.printf(" + " + matSols.contents[i][j] + (char) (asciiCounter));
                 output += " + " + matSols.contents[i][j] + (char) (asciiCounter);
               } else {
-                // System.out.printf("" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+                // System.out.printf("" + (-1 * matSols.contents[i][j]) + (char)
+                // (asciiCounter));
                 output += "" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter);
                 isFirst = false;
               }
@@ -1048,5 +1039,4 @@ public class Matrix {
       }
     }
   }
-
 }

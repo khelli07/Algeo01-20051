@@ -33,7 +33,7 @@ public class Main {
 
     if (mat.matrixSize() > 0) {
       System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByCofactor());
-  
+
       System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
       prompt = sc.nextInt();
       if (prompt == 1) {
@@ -171,7 +171,7 @@ public class Main {
         }
         mat.writeInputMatrix(namaFile, output);
       }
-    } 
+    }
   }
 
   static void hitungSPLGauss() {
