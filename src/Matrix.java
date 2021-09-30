@@ -1,6 +1,11 @@
 package src;
 
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class Matrix {
   static double valUndef = -999.0;
@@ -21,11 +26,82 @@ public class Matrix {
     this.cols = cols;
   }
 
+  public int getRows() {
+    return this.rows;
+  }
+
+  public int getCols() {
+    return this.cols;
+  }
+
+  public int matrixSize() {
+    return this.rows * this.cols;
+  }
+
   public void readMatrix() {
     for (int i = 0; i < this.rows; i++) {
       for (int j = 0; j < this.cols; j++) {
         this.contents[i][j] = sc.nextDouble();
       }
+    }
+  }
+
+  public void readMatrixFromFile() {
+    System.out.print("Masukkan nama file (contoh: a.txt): ");
+    String fileName = sc.next();
+    Scanner reader = null;
+    try {
+      reader = new Scanner(new File(fileName));
+      ArrayList<String> lines = new ArrayList<String>();
+      while (reader.hasNextLine()) {
+        lines.add(reader.nextLine());
+      }
+      //  Proses lines
+      int rows = lines.size();
+      String[] elmts = lines.get(0).split(" ", -1);
+      int cols = elmts.length;
+      // Buat matrix
+      this.contents = new double[rows][cols];
+      this.rows = rows;
+      this.cols = cols;
+      for (int i = 0; i < this.rows; i ++) {
+        String[] line = lines.get(i).split(" ", -1);
+        for (int j = 0; j < this.cols; j ++) {
+          this.contents[i][j] = Double.parseDouble(line[j]);
+        }
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println("File " + fileName + " tidak ditemukan.");
+    }
+  }
+
+  public void readInterpolationMatrix() {
+    System.out.print("Masukkan nama file (contoh: a.txt): ");
+    String fileName = sc.next();
+    Scanner reader = null;
+    try {
+      reader = new Scanner(new File(fileName));
+      ArrayList<String> lines = new ArrayList<String>();
+      reader.nextLine(); // Skip line pertama (yaitu orde polinom)
+      while (reader.hasNextLine()) {
+        lines.add(reader.nextLine());
+      }
+      //  Proses lines
+      int rows = lines.size();
+      String[] elmts = lines.get(0).split(" ", -1);
+      int cols = elmts.length;
+      // Buat matrix
+      this.contents = new double[rows][cols];
+      this.rows = rows;
+      this.cols = cols;
+      for (int i = 0; i < this.rows; i ++) {
+        String[] line = lines.get(i).split(" ", -1);
+        for (int j = 0; j < this.cols; j ++) {
+          this.contents[i][j] = Double.parseDouble(line[j]);
+        }
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println("File " + fileName + " tidak ditemukan.");
     }
   }
 
@@ -43,6 +119,48 @@ public class Matrix {
     }
   }
 
+<<<<<<< HEAD
+=======
+  public void writeInputMatrix(String fileName, String additionalString) {
+    try {
+      File file = new File(fileName);
+
+      if (file.createNewFile()) {
+        PrintWriter pw = new PrintWriter(file);
+        pw.println("Matriks masukan: ");
+          for (int i = 0; i < this.rows; i++) {
+          for (int j = 0; j < this.cols; j++) {
+            // Menghindari signed zero :-(
+            if (this.contents[i][j] == 0) {
+              pw.print(0.0 + " ");
+            } else {
+              pw.print(this.contents[i][j] + " ");
+            }
+          }
+          pw.println("");
+        }
+        if (!additionalString.equals("")) {
+          pw.println(additionalString);
+        }
+        pw.close();
+        System.out.println("Hasil perhitungan telah disimpan di " + fileName + ".");
+      } else {
+        System.out.println("File " + fileName + " sudah ada di directory.");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void swapRow(int row1, int row2) {
+    for (int j = 0; j < this.cols; j++) {
+      double temp = this.contents[row1][j];
+      this.contents[row1][j] = this.contents[row2][j];
+      this.contents[row2][j] = temp;
+    }
+  }
+
+>>>>>>> 5268f2722d77f010890768cabcc510c31f4b7676
   public int getIdxUtama(int row) {
     int col = 0;
     while (col < this.cols) {
@@ -87,12 +205,45 @@ public class Matrix {
     return mOut;
   }
 
+<<<<<<< HEAD
   public void swapRow(int row1, int row2) {
     for (int j = 0; j < this.cols; j++) {
       double temp = this.contents[row1][j];
       this.contents[row1][j] = this.contents[row2][j];
       this.contents[row2][j] = temp;
     }
+=======
+  public Matrix copyWithIdentity() {
+    Matrix mOut = new Matrix(this.rows, this.cols * 2);
+    for (int i = 0; i < mOut.rows; i++) {
+      for (int j = 0; j < this.rows; j++) {
+        mOut.contents[i][j] = this.contents[i][j];
+      }
+
+      for (int j = this.rows; j < mOut.cols; j++) {
+        if (j == i + this.rows) {
+          mOut.contents[i][j] = 1;
+        } else {
+          mOut.contents[i][j] = 0;
+        }
+      }
+    }
+
+    return mOut;
+  }
+
+  public Matrix getInverse() {
+    int cols = this.cols / 2;
+    Matrix mOut = new Matrix(this.rows, cols);
+
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = cols; j < this.cols; j++) {
+        mOut.contents[i][j - cols] = this.contents[i][j];
+      }
+    }
+
+    return mOut;
+>>>>>>> 5268f2722d77f010890768cabcc510c31f4b7676
   }
 
   // ===========
@@ -194,6 +345,8 @@ public class Matrix {
           iMatrix.contents[i][j] *= mult;
         }
       }
+    } else {
+      return new Matrix(0, 0);
     }
     return iMatrix;
   }
@@ -215,49 +368,47 @@ public class Matrix {
     return matrixInvertible;
   }
 
-  public Matrix copyWithIdentity() {
-    Matrix mOut = new Matrix(this.rows, this.cols * 2);
-    for (int i = 0; i < mOut.rows; i++) {
-      for (int j = 0; j < this.rows; j++) {
-        mOut.contents[i][j] = this.contents[i][j];
-      }
-
-      for (int j = this.rows; j < mOut.cols; j++) {
-        if (j == i + this.rows) {
-          mOut.contents[i][j] = 1;
-        } else {
-          mOut.contents[i][j] = 0;
-        }
-      }
-    }
-
-    return mOut;
-  }
-
-  public Matrix getInverse() {
-    int cols = this.cols / 2;
-    Matrix mOut = new Matrix(this.rows, cols);
-
-    for (int i = 0; i < this.rows; i++) {
-      for (int j = cols; j < this.cols; j++) {
-        mOut.contents[i][j - cols] = this.contents[i][j];
-      }
-    }
-
-    return mOut;
-  }
-
   public void inverseByOBE() {
     Matrix matWithIdentity = this.copyWithIdentity();
     matWithIdentity.gElimination();
 
+    Matrix matInverse = new Matrix(0, 0);
+
     if (matWithIdentity.isInvertible()) {
       matWithIdentity.jElimination();
 
-      Matrix matInverse = matWithIdentity.getInverse();
+      matInverse = matWithIdentity.getInverse();
       matInverse.displayMatrix();
     } else {
       System.out.println("Matriks tidak memiliki balikan.");
+    }
+
+    System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+    int prompt = sc.nextInt();
+    if (prompt == 1) {
+      String namaFile;
+      System.out.print("Masukkan nama file (contoh: a.txt): ");
+      namaFile = sc.next();
+      String output = "";
+      if (matWithIdentity.isInvertible()) {
+        output += "Inversnya adalah: \n";
+        for (int i = 0; i < matInverse.rows; i++) {
+          for (int j = 0; j < matInverse.cols; j++) {
+            // Menghindari signed zero :-(
+            if (matInverse.contents[i][j] == 0) {
+              // System.out.print(0.0 + " ");
+              output += 0.0 + " ";
+            } else {
+              // System.out.print(inverse.contents[i][j] + " ");
+              output += matInverse.contents[i][j] + " ";
+            }
+          }
+          output += "\n";
+        }
+      } else {
+        output += "Matriks tersebut tidak memiliki invers.\n";
+      }
+      this.writeInputMatrix(namaFile, output);
     }
   }
 
@@ -267,11 +418,12 @@ public class Matrix {
 
   public double[] solveByCramerRule() {
     double[] retArray;
-    retArray = new double[this.cols - 1];
+    retArray = new double[0];
     if (this.cols - 1 == this.rows) { // Hanya bisa dilakukan untuk matriks persegi
       Matrix squareMatrix = this.copyMatrixWithoutLC();
       double det = squareMatrix.getDeterminantByCofactor();
       if (det != 0) { // Apabila det = 0, tidak bisa diselesaikan dengan aturan Cramer
+        retArray = new double[this.cols - 1];
         for (int col = 0; col < this.cols - 1; col++) {
           Matrix cramerMatrix = this.copyMatrixWithoutLC();
           for (int row = 0; row < this.rows; row++) {
@@ -305,12 +457,15 @@ public class Matrix {
 
   public double[] solveByInverse() {
     double[] retArray;
-    retArray = new double[this.cols - 1];
+    retArray = new double[0];
     Matrix coeffMatrix = this.copyMatrixWithoutLC();
-    Matrix valMatrix = this.copyMatrixLC();
-    Matrix resMatrix = coeffMatrix.createInverseMatrix().getMatrixMultipliedBy(valMatrix);
-    for (int i = 0; i < resMatrix.rows; i++) {
-      retArray[i] = resMatrix.contents[i][0];
+    if (coeffMatrix.getDeterminantByOBE() != 0) {
+      retArray = new double[this.cols - 1];
+      Matrix valMatrix = this.copyMatrixLC();
+      Matrix resMatrix = coeffMatrix.createInverseMatrix().getMatrixMultipliedBy(valMatrix);
+      for (int i = 0; i < resMatrix.rows; i++) {
+        retArray[i] = resMatrix.contents[i][0];
+      }
     }
     return retArray;
   }
@@ -468,8 +623,8 @@ public class Matrix {
       }
     }
 
+    Matrix matSols = new Matrix(mat.cols - 1, mat.cols);
     if (matrixSolvable) {
-      Matrix matSols = new Matrix(mat.cols - 1, mat.cols);
 
       for (int i = 0; i < matSols.rows; i++) {
         for (int j = 0; j < matSols.cols; j++) {
@@ -548,6 +703,66 @@ public class Matrix {
 
     } else {
       System.out.println("SPL tidak memiliki solusi.");
+    }
+    
+    System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+    int prompt = sc.nextInt();
+    if (prompt == 1) {
+      String namaFile;
+      System.out.print("Masukkan nama file (contoh: a.txt): ");
+      namaFile = sc.next();
+      String output = "";
+      if (matrixSolvable) {
+        output += "Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss): \n";
+        for (int i = 0; i < matSols.rows; i++) {
+          boolean isFirst = true;
+          output += "x" + (i + 1) + " = ";
+          // System.out.printf("x%d = ", i + 1);
+          double constant = matSols.contents[i][0];
+
+          int asciiCounter = 97;
+          if (constant != valUndef && constant != 0) {
+            // System.out.printf("%f", constant);
+            output += constant;
+            isFirst = false;
+          }
+          if (constant == valUndef) {
+            // System.out.printf("" + (char) (asciiCounter + i));
+            output += "" + (char) (asciiCounter + i);
+            isFirst = false;
+          }
+          for (int j = 1; j < matSols.cols; j++) {
+            if (matSols.contents[i][j] < 0) {
+              if (!isFirst) {
+                // System.out.printf(" - " + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+                output += " - " + (-1 * matSols.contents[i][j]) + (char) (asciiCounter);
+              } else {
+                // System.out.printf("-" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+                output += "-" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter);
+                isFirst = false;
+              }
+            } else if (matSols.contents[i][j] > 0) {
+              if (!isFirst) {
+                // System.out.printf(" + " + matSols.contents[i][j] + (char) (asciiCounter));
+                output += " + " + matSols.contents[i][j] + (char) (asciiCounter);
+              } else {
+                // System.out.printf("" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter));
+                output += "" + (-1 * matSols.contents[i][j]) + (char) (asciiCounter);
+                isFirst = false;
+              }
+            } else {
+              // System.out.printf("");
+              output += "";
+            }
+            asciiCounter++;
+          }
+          // System.out.println();
+          output += "\n";
+        }
+      } else {
+        output += "SPL tidak memiliki solusi.\n";
+      }
+      mat.writeInputMatrix(namaFile, output);
     }
   }
 
@@ -676,6 +891,52 @@ public class Matrix {
     }
     System.out.println("");
     System.out.println("Taksiran untuk titik x=" + x + " adalah " + approx);
+
+    // FILE
+    System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+    int prompt = sc.nextInt();
+    if (prompt == 1) {
+      String namaFile;
+      System.out.print("Masukkan nama file (contoh: a.txt): ");
+      namaFile = sc.next();
+      try {
+        File file = new File(namaFile);
+
+        if (file.createNewFile()) {
+          PrintWriter pw = new PrintWriter(file);
+          pw.println("Matriks masukan: ");
+          for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+              // Menghindari signed zero :-(
+              if (this.contents[i][j] == 0) {
+                pw.print(0.0 + " ");
+              } else {
+                pw.print(this.contents[i][j] + " ");
+              }
+            }
+            pw.println("");
+          }
+          pw.println("Persamaan interpolasinya adalah: ");
+          for (int i = 0; i < retArray.length; i++) { // Proses retArray
+            if (i == 0) { // Konstanta
+              pw.print(retArray[i]);
+            } else if (i == 1) {
+              pw.print(" + " + retArray[i] + "x");
+            } else {
+              pw.print(" + " + retArray[i] + "x^" + i);
+            }
+          }
+          pw.println("");
+          pw.println("Taksiran untuk titik x=" + x + " adalah " + approx);
+          pw.close();
+          System.out.println("Hasil perhitungan telah disimpan di " + namaFile + ".");
+        } else {
+          System.out.println("File " + namaFile + " sudah ada di directory.");
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   // ==========
@@ -718,8 +979,6 @@ public class Matrix {
       }
     }
 
-    eqMatrix.displayMatrix();
-
     retArray = eqMatrix.solveByGaussJordan();
     double approx = 0;
     System.out.println("Persamaan regresinya adalah: ");
@@ -738,6 +997,56 @@ public class Matrix {
       System.out.print(" x" + (i + 1) + "=" + xTaksiran[i]);
     }
     System.out.println(" adalah " + approx);
+
+    // FILE
+    System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+    int prompt = sc.nextInt();
+    if (prompt == 1) {
+      String namaFile;
+      System.out.print("Masukkan nama file (contoh: a.txt): ");
+      namaFile = sc.next();
+      try {
+        File file = new File(namaFile);
+
+        if (file.createNewFile()) {
+          PrintWriter pw = new PrintWriter(file);
+          pw.println("Matriks masukan: ");
+          for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+              // Menghindari signed zero :-(
+              if (this.contents[i][j] == 0) {
+                pw.print(0.0 + " ");
+              } else {
+                pw.print(this.contents[i][j] + " ");
+              }
+            }
+            pw.println("");
+          }
+          pw.println("Persamaan regresinya adalah: ");
+          for (int i = 0; i < retArray.length; i++) {
+            if (i == 0) {
+              pw.print("yi = " + retArray[i]);
+              approx += Double.parseDouble(retArray[i]);
+            } else {
+              pw.print(" + " + retArray[i] + "x" + i + "i");
+              approx += Double.parseDouble(retArray[i]) * xTaksiran[i - 1];
+            }
+          }
+          pw.println(" + epsilon_i");
+          pw.print("Taksiran untuk");
+          for (int i = 0; i < xTaksiran.length; i++) {
+            pw.print(" x" + (i + 1) + "=" + xTaksiran[i]);
+          }
+          pw.println(" adalah " + approx);
+          pw.close();
+          System.out.println("Hasil perhitungan telah disimpan di " + namaFile + ".");
+        } else {
+          System.out.println("File " + namaFile + " sudah ada di directory.");
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
 
 }

@@ -1,6 +1,10 @@
 package src;
 
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Main {
   static boolean isProgramRunning = true;
@@ -13,37 +17,61 @@ public class Main {
   static void hitungDeterminantCofactor() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
+    Matrix mat = new Matrix(0, 0);
 
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks persegi: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
 
+    if (mat.matrixSize() > 0) {
       System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByCofactor());
-    } else {
-
+  
+      System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+      prompt = sc.nextInt();
+      if (prompt == 1) {
+        String namaFile;
+        System.out.print("Masukkan nama file (contoh: a.txt): ");
+        namaFile = sc.next();
+        mat.writeInputMatrix(namaFile, "Determinan dari matriks tersebut adalah " + mat.getDeterminantByCofactor());
+      }
     }
   }
 
   static void hitungDeterminantOBE() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
+    Matrix mat = new Matrix(0, 0);
 
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks persegi: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.println("Determinan dari matriks tersebut adalah " + mat.getDeterminantByOBE());
-    } else {
 
+      System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+      prompt = sc.nextInt();
+      if (prompt == 1) {
+        String namaFile;
+        System.out.print("Masukkan nama file (contoh: a.txt): ");
+        namaFile = sc.next();
+        mat.writeInputMatrix(namaFile, "Determinan dari matriks tersebut adalah " + mat.getDeterminantByOBE());
+      }
     }
   }
   // ==========
@@ -53,56 +81,103 @@ public class Main {
   static void hitungSPLCramer() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
       int rows = sc.nextInt();
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
-      System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Cramer): ");
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       double[] res = mat.solveByCramerRule();
-      for (int i = 0; i < res.length; i++) {
-        System.out.println("x" + (i + 1) + " = " + res[i]);
+      if (res.length > 0) {
+        System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Cramer): ");
+        for (int i = 0; i < res.length; i++) {
+          System.out.println("x" + (i + 1) + " = " + res[i]);
+        }
+      } else {
+        System.out.println("Soal tidak bisa diselesaikan karena determinan matriks = 0.");
       }
-    } else {
 
+      System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+      prompt = sc.nextInt();
+      if (prompt == 1) {
+        String namaFile;
+        System.out.print("Masukkan nama file (contoh: a.txt): ");
+        namaFile = sc.next();
+        String output = "";
+        if (res.length > 0) {
+          output += "Solusi dari persamaan augmented yang Anda masukkan (dengan Cramer): \n";
+          for (int i = 0; i < res.length; i++) {
+            output += "x" + (i + 1) + " = " + res[i] + "\n";
+          }
+        } else {
+          output += "Soal tidak bisa diselesaikan karena determinan matriks = 0.\n";
+        }
+        mat.writeInputMatrix(namaFile, output);
+      }
     }
   }
 
   static void hitungSPLInvers() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
       int rows = sc.nextInt();
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
-      System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
-      double[] res = mat.solveByInverse();
-      for (int i = 0; i < res.length; i++) {
-        System.out.println("x" + (i + 1) + " = " + res[i]);
-      }
-    } else {
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
     }
+    if (mat.matrixSize() > 0) {
+      double[] res = mat.solveByInverse();
+      if (res.length > 0) {
+        System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): ");
+        for (int i = 0; i < res.length; i++) {
+          System.out.println("x" + (i + 1) + " = " + res[i]);
+        }
+      } else {
+        System.out.println("Soal tidak bisa diselesaikan karena determinan matriks = 0.");
+      }
+
+      System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+      prompt = sc.nextInt();
+      if (prompt == 1) {
+        String namaFile;
+        System.out.print("Masukkan nama file (contoh: a.txt): ");
+        namaFile = sc.next();
+        String output = "";
+        if (res.length > 0) {
+          output += "Solusi dari persamaan augmented yang Anda masukkan (dengan Inverse): \n";
+          for (int i = 0; i < res.length; i++) {
+            output += "x" + (i + 1) + " = " + res[i] + "\n";
+          }
+        } else {
+          output += "Soal tidak bisa diselesaikan karena determinan matriks = 0.\n";
+        }
+        mat.writeInputMatrix(namaFile, output);
+      }
+    } 
   }
 
   static void hitungSPLGauss() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
+    Matrix mat = new Matrix(0, 0);
 
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
@@ -110,44 +185,64 @@ public class Main {
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss): ");
       mat.solveByGauss();
-    } else {
-
     }
   }
 
   static void hitungSPLGaussJordan() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan banyak baris: ");
       int rows = sc.nextInt();
       System.out.print("Masukkan banyak kolom: ");
       int cols = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, cols);
+      mat = new Matrix(rows, cols);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
-      System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): ");
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       String[] res = mat.solveByGaussJordan();
       if (res[0] == "false") {
-        System.out.println("Solusi tidak ada");
+        System.out.println("Solusi persamaan tersebut tidak ada.");
       } else {
+        System.out.println("Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): ");
         for (int i = 0; i < res.length; i++) {
           System.out.println("x" + (i + 1) + " = " + res[i]);
         }
       }
-    } else {
 
+      System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+      prompt = sc.nextInt();
+      if (prompt == 1) {
+        String namaFile;
+        System.out.print("Masukkan nama file (contoh: a.txt): ");
+        namaFile = sc.next();
+        String output = "";
+        if (res[0] != "false") {
+          output += "Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): \n";
+          for (int i = 0; i < res.length; i++) {
+            output += "x" + (i + 1) + " = " + res[i] + "\n";
+          }
+        } else {
+          output += "Solusi persamaan tersebut tidak ada.\n";
+        }
+        mat.writeInputMatrix(namaFile, output);
+      }
     }
   }
 
@@ -158,40 +253,76 @@ public class Main {
   static void cariInversAdjoin() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
+      Matrix inverse = mat.createInverseMatrix();
 
-      System.out.println("Inversnya adalah: ");
-      mat.createInverseMatrix().displayMatrix();
-    } else {
+      if (inverse.matrixSize() > 0) {
+        System.out.println("Inversnya adalah: ");
+        mat.createInverseMatrix().displayMatrix();
+      } else {
+        System.out.println("Matriks tersebut tidak memiliki invers.");
+      }
 
+      System.out.print("Simpan hasil di dalam file? (0: tidak, 1: ya): ");
+      prompt = sc.nextInt();
+      if (prompt == 1) {
+        String namaFile;
+        System.out.print("Masukkan nama file (contoh: a.txt): ");
+        namaFile = sc.next();
+        String output = "";
+        if (inverse.matrixSize() > 0) {
+          output += "Inversnya adalah: \n";
+          for (int i = 0; i < inverse.rows; i++) {
+            for (int j = 0; j < inverse.cols; j++) {
+              // Menghindari signed zero :-(
+              if (inverse.contents[i][j] == 0) {
+                // System.out.print(0.0 + " ");
+                output += 0.0 + " ";
+              } else {
+                // System.out.print(inverse.contents[i][j] + " ");
+                output += inverse.contents[i][j] + " ";
+              }
+            }
+            output += "\n";
+          }
+        } else {
+          output += "Matriks tersebut tidak memiliki invers.\n";
+        }
+        mat.writeInputMatrix(namaFile, output);
+      }
     }
   }
 
   static void cariInversOBE() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan ordo matriks: ");
       int rows = sc.nextInt();
 
-      Matrix mat = new Matrix(rows, rows);
+      mat = new Matrix(rows, rows);
 
       System.out.println("Masukkan matriks: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.println("Inversnya adalah: ");
       mat.inverseByOBE();
-    } else {
-
     }
   }
 
@@ -202,21 +333,22 @@ public class Main {
   static void interpolasi() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan orde polinomial: ");
       int n = sc.nextInt();
 
-      Matrix mat = new Matrix(n + 1, 2);
+      mat = new Matrix(n + 1, 2);
       System.out.println("Masukkan " + (n + 1) + " pasangan x y:");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readInterpolationMatrix();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.print("Masukkan nilai x yang ingin ditaksir: ");
       double x = sc.nextDouble();
 
       mat.solveInterpolation(x);
-    } else {
-
     }
   }
 
@@ -227,7 +359,7 @@ public class Main {
   static void regresiBerganda() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-
+    Matrix mat = new Matrix(0, 0);
     System.out.println(prompt);
     if (prompt == 1) {
       System.out.print("Masukkan nilai n (banyak variabel): ");
@@ -236,11 +368,15 @@ public class Main {
       System.out.print("Masukkan nilai m (banyak sampel): ");
       int m = sc.nextInt();
 
-      Matrix mat = new Matrix(m, n + 1);
+      mat = new Matrix(m, n + 1);
       System.out.println("Masukkan nilai x1i x2i ... xni yi: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       double[] xTaksiran;
+      int n = mat.getCols() - 1;
       xTaksiran = new double[n];
       System.out.println("Masukkan nilai x1 x2 ... xn (yang ingin ditaksir): ");
 
@@ -249,8 +385,6 @@ public class Main {
       }
 
       mat.solveRegression(xTaksiran);
-    } else {
-
     }
   }
 

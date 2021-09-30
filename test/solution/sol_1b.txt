@@ -1,0 +1,12 @@
+Matriks masukan: 
+1.0 -1.0 0.0 0.0 1.0 3.0 
+1.0 1.0 0.0 -3.0 0.0 6.0 
+2.0 -1.0 0.0 1.0 -1.0 5.0 
+-1.0 2.0 0.0 -2.0 -1.0 -1.0 
+Solusi dari persamaan augmented yang Anda masukkan (dengan Gauss-Jordan): 
+x1 = e + 3.0
+x2 = 2.0e
+x3 = c
+x4 = e - 1.0
+x5 = e
+
