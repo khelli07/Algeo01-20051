@@ -333,21 +333,22 @@ public class Main {
   static void interpolasi() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-    
+    Matrix mat = new Matrix(0, 0);
     if (prompt == 1) {
       System.out.print("Masukkan orde polinomial: ");
       int n = sc.nextInt();
 
-      Matrix mat = new Matrix(n + 1, 2);
+      mat = new Matrix(n + 1, 2);
       System.out.println("Masukkan " + (n + 1) + " pasangan x y:");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readInterpolationMatrix();
+    }
+    if (mat.matrixSize() > 0) {
       System.out.print("Masukkan nilai x yang ingin ditaksir: ");
       double x = sc.nextDouble();
 
       mat.solveInterpolation(x);
-    } else {
-
     }
   }
 
@@ -358,7 +359,7 @@ public class Main {
   static void regresiBerganda() {
     System.out.print("Masukan teks (0) atau input (1)? (0/1): ");
     int prompt = sc.nextInt();
-    
+    Matrix mat = new Matrix(0, 0);
     System.out.println(prompt);
     if (prompt == 1) {
       System.out.print("Masukkan nilai n (banyak variabel): ");
@@ -367,11 +368,15 @@ public class Main {
       System.out.print("Masukkan nilai m (banyak sampel): ");
       int m = sc.nextInt();
 
-      Matrix mat = new Matrix(m, n + 1);
+      mat = new Matrix(m, n + 1);
       System.out.println("Masukkan nilai x1i x2i ... xni yi: ");
       mat.readMatrix();
-
+    } else if (prompt == 0) {
+      mat.readMatrixFromFile();
+    }
+    if (mat.matrixSize() > 0) {
       double[] xTaksiran;
+      int n = mat.getCols() - 1;
       xTaksiran = new double[n];
       System.out.println("Masukkan nilai x1 x2 ... xn (yang ingin ditaksir): ");
 
@@ -380,8 +385,6 @@ public class Main {
       }
 
       mat.solveRegression(xTaksiran);
-    } else {
-
     }
   }
 

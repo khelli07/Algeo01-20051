@@ -26,6 +26,14 @@ public class Matrix {
     this.cols = cols;
   }
 
+  public int getRows() {
+    return this.rows;
+  }
+
+  public int getCols() {
+    return this.cols;
+  }
+
   public int matrixSize() {
     return this.rows * this.cols;
   }
@@ -45,6 +53,36 @@ public class Matrix {
     try {
       reader = new Scanner(new File(fileName));
       ArrayList<String> lines = new ArrayList<String>();
+      while (reader.hasNextLine()) {
+        lines.add(reader.nextLine());
+      }
+      //  Proses lines
+      int rows = lines.size();
+      String[] elmts = lines.get(0).split(" ", -1);
+      int cols = elmts.length;
+      // Buat matrix
+      this.contents = new double[rows][cols];
+      this.rows = rows;
+      this.cols = cols;
+      for (int i = 0; i < this.rows; i ++) {
+        String[] line = lines.get(i).split(" ", -1);
+        for (int j = 0; j < this.cols; j ++) {
+          this.contents[i][j] = Double.parseDouble(line[j]);
+        }
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println("File " + fileName + " tidak ditemukan.");
+    }
+  }
+
+  public void readInterpolationMatrix() {
+    System.out.print("Masukkan nama file (contoh: a.txt): ");
+    String fileName = sc.next();
+    Scanner reader = null;
+    try {
+      reader = new Scanner(new File(fileName));
+      ArrayList<String> lines = new ArrayList<String>();
+      reader.nextLine(); // Skip line pertama (yaitu orde polinom)
       while (reader.hasNextLine()) {
         lines.add(reader.nextLine());
       }
